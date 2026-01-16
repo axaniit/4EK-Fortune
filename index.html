@@ -7,49 +7,49 @@
 
   <style>
     :root{
-      /* UCF-ish palette */
-      --bg: #070707;
-      --panel: rgba(16,16,16,.78);
-      --gold: #C8A64B;
+      /* UCF-inspired palette */
+      --bg:#070707;
+      --gold:#C8A64B;
       --gold2:#F9CA3B;
-      --text: #F3F3F3;
+      --text:#F3F3F3;
       --muted: rgba(243,243,243,.78);
       --line: rgba(200,166,75,.35);
 
-      --cardW: 170px;
-      --cardH: 260px;
-      --radius: 18px;
+      /* Card sizing */
+      --cardW: 178px;
+      --cardH: 268px;
+      --radius: 24px; /* more card-like */
     }
 
-    *{ box-sizing: border-box; }
+    *{ box-sizing:border-box; }
 
     body{
       margin:0;
       min-height:100vh;
-      color: var(--text);
+      color:var(--text);
       background:
         radial-gradient(1200px 600px at 50% 0%, rgba(200,166,75,.12), transparent 60%),
         radial-gradient(800px 500px at 15% 70%, rgba(249,202,59,.08), transparent 55%),
         radial-gradient(900px 500px at 85% 80%, rgba(200,166,75,.06), transparent 55%),
         var(--bg);
       font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
-      letter-spacing: .2px;
+      letter-spacing:.2px;
     }
 
     .wrap{
       max-width: 980px;
-      margin: 0 auto;
+      margin:0 auto;
       padding: 28px 16px 40px;
     }
 
     .header{
-      border: 1px solid var(--line);
+      border:1px solid var(--line);
       background: linear-gradient(180deg, rgba(18,18,18,.85), rgba(10,10,10,.65));
       border-radius: 22px;
       padding: 18px 18px 14px;
       box-shadow: 0 18px 40px rgba(0,0,0,.35);
       position: relative;
-      overflow: hidden;
+      overflow:hidden;
     }
     .header:before{
       content:"";
@@ -63,17 +63,16 @@
 
     .title{
       position:relative;
-      margin: 0;
+      margin:0;
       font-size: clamp(22px, 3.2vw, 34px);
       font-weight: 800;
-      text-align: center;
-      letter-spacing: .6px;
+      text-align:center;
+      letter-spacing:.6px;
     }
-
     .subtitle{
       position:relative;
       margin: 8px auto 0;
-      max-width: 62ch;
+      max-width: 66ch;
       text-align:center;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       font-size: 14px;
@@ -86,13 +85,12 @@
       margin-top: 14px;
       display:flex;
       justify-content:center;
-      gap: 10px;
-      flex-wrap: wrap;
+      gap:10px;
+      flex-wrap:wrap;
     }
-
     .btn{
       appearance:none;
-      border: 1px solid rgba(200,166,75,.55);
+      border:1px solid rgba(200,166,75,.55);
       background: rgba(8,8,8,.55);
       color: var(--text);
       border-radius: 999px;
@@ -109,31 +107,30 @@
 
     .status{
       position:relative;
-      margin-top: 10px;
+      margin-top:10px;
       text-align:center;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      font-size: 13px;
+      font-size:13px;
       color: rgba(243,243,243,.84);
       min-height: 20px;
     }
 
     .board{
       margin-top: 22px;
-      border: 1px solid var(--line);
+      border:1px solid var(--line);
       border-radius: 24px;
       background: rgba(10,10,10,.55);
       padding: 22px 14px 26px;
       box-shadow: 0 18px 50px rgba(0,0,0,.35);
     }
 
-    /* TRUE 4x3 grid with empty 2A and 2D */
+    /* Exact 4x3 grid w/ empties at 2A and 2D */
     .grid{
       display:grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
-      grid-template-rows: auto auto auto;
       gap: 18px 16px;
-      justify-items: center;
-      align-items: start;
+      justify-items:center;
+      align-items:start;
     }
 
     .slot{
@@ -142,144 +139,212 @@
       perspective: 1200px;
     }
 
-    /* Place cards into exact cells:
-       Row 1: 1-4
-       Row 2: empty, 5, 6, empty
-       Row 3: 7-10
-    */
     .pos-1{ grid-column:1; grid-row:1; }
     .pos-2{ grid-column:2; grid-row:1; }
     .pos-3{ grid-column:3; grid-row:1; }
     .pos-4{ grid-column:4; grid-row:1; }
-
     .pos-5{ grid-column:2; grid-row:2; }
     .pos-6{ grid-column:3; grid-row:2; }
-
     .pos-7{ grid-column:1; grid-row:3; }
     .pos-8{ grid-column:2; grid-row:3; }
     .pos-9{ grid-column:3; grid-row:3; }
     .pos-10{ grid-column:4; grid-row:3; }
 
     .card{
-      width: 100%;
-      height: 100%;
-      position: relative;
+      width:100%;
+      height:100%;
+      position:relative;
       transform-style: preserve-3d;
       transition: transform .75s cubic-bezier(.2,.8,.2,1);
-      cursor: pointer;
+      cursor:pointer;
       user-select:none;
     }
-
     .card.is-flipped{ transform: rotateY(180deg); }
-    .card.is-locked{ cursor: not-allowed; opacity: .72; }
+    .card.is-locked{ cursor:not-allowed; opacity:.72; }
 
     .face{
       position:absolute;
       inset:0;
       border-radius: var(--radius);
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden;
+      backface-visibility:hidden;
+      -webkit-backface-visibility:hidden;
       overflow:hidden;
       display:flex;
-      flex-direction: column;
-      justify-content: space-between;
-      border: 1px solid rgba(200,166,75,.45);
-      box-shadow: 0 14px 40px rgba(0,0,0,.45);
+      flex-direction:column;
+      border:1px solid rgba(200,166,75,.48);
+      box-shadow: 0 16px 44px rgba(0,0,0,.48);
     }
 
-    /* FRONT = tarot-back illustration, NO WORDS */
+    /* CARD FRONT: cohesive tarot-back design system */
     .front{
       background:
         radial-gradient(320px 260px at 50% 30%, rgba(249,202,59,.14), transparent 62%),
         repeating-linear-gradient(135deg, transparent 0 11px, rgba(200,166,75,.05) 11px 12px),
-        linear-gradient(180deg, rgba(12,12,12,.95), rgba(4,4,4,.96));
-      position: relative;
-      display:flex;
+        linear-gradient(180deg, rgba(14,14,14,.96), rgba(4,4,4,.97));
+      position:relative;
       align-items:center;
       justify-content:center;
+      padding: 14px;
     }
 
-    .front:before{
-      content:"";
+    /* Outer + inner frame to make it feel like a real tarot back */
+    .front .frame-outer{
       position:absolute;
-      inset:12px;
-      border-radius: calc(var(--radius) - 8px);
-      border: 1px solid rgba(249,202,59,.35);
-      box-shadow: inset 0 0 0 1px rgba(200,166,75,.15);
-      pointer-events:none;
-    }
-
-    .front:after{
-      content:"";
-      position:absolute;
-      top: 18px;
-      left: 18px;
-      right: 18px;
-      bottom: 18px;
+      inset:10px;
       border-radius: calc(var(--radius) - 10px);
-      background:
-        radial-gradient(120px 120px at 50% 28%, rgba(200,166,75,.22), transparent 62%),
-        radial-gradient(130px 130px at 50% 72%, rgba(200,166,75,.18), transparent 62%);
+      border: 1px solid rgba(249,202,59,.38);
+      box-shadow: inset 0 0 0 1px rgba(200,166,75,.16);
       pointer-events:none;
+    }
+    .front .frame-inner{
+      position:absolute;
+      inset:18px;
+      border-radius: calc(var(--radius) - 16px);
+      border: 1px solid rgba(200,166,75,.22);
+      pointer-events:none;
+    }
+
+    /* Corner filigree */
+    .front .filigree{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      opacity:.95;
+    }
+    .front .filigree:before,
+    .front .filigree:after{
+      content:"";
+      position:absolute;
+      width: 52px;
+      height: 52px;
+      border: 1px solid rgba(249,202,59,.35);
+      border-left:none;
+      border-bottom:none;
+      border-radius: 14px;
+      top: 16px;
+      left: 16px;
+      transform: rotate(0deg);
+      box-shadow: inset 0 0 0 1px rgba(200,166,75,.10);
+    }
+    .front .filigree:after{
+      top:auto; left:auto;
+      bottom:16px; right:16px;
+      border-right:none; border-top:none;
+      border-left:1px solid rgba(249,202,59,.35);
+      border-bottom:1px solid rgba(249,202,59,.35);
+      border-top:none; border-right:none;
+      transform: rotate(0deg);
+    }
+    .front .filigree .tl,
+    .front .filigree .br{
+      position:absolute;
+      width: 52px;
+      height: 52px;
+      border: 1px solid rgba(249,202,59,.35);
+      border-right:none;
+      border-bottom:none;
+      border-radius: 14px;
+      top:16px;
+      right:16px;
+      box-shadow: inset 0 0 0 1px rgba(200,166,75,.10);
+    }
+    .front .filigree .br{
+      top:auto; right:auto;
+      bottom:16px;
+      left:16px;
+      border-left:none;
+      border-top:none;
+      border-right:1px solid rgba(249,202,59,.35);
+      border-bottom:1px solid rgba(249,202,59,.35);
+    }
+
+    /* Center sigil circle (consistent across all cards) */
+    .sigil{
+      width: 120px;
+      height: 120px;
+      border-radius: 999px;
+      border: 1px solid rgba(249,202,59,.55);
+      box-shadow: inset 0 0 0 1px rgba(200,166,75,.18);
+      background:
+        radial-gradient(circle at 30% 30%, rgba(249,202,59,.18), transparent 55%),
+        rgba(0,0,0,.20);
+      display:grid;
+      place-items:center;
+      position:relative;
+      z-index:2;
+    }
+    .sigil:before{
+      content:"";
+      position:absolute;
+      inset: 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(200,166,75,.22);
       opacity:.9;
     }
 
-    .art{
-      position: relative;
-      width: 78%;
-      height: 78%;
-      display:grid;
-      place-items:center;
-      z-index: 2;
+    .sigil svg{
+      width: 72px;
+      height: 72px;
+      display:block;
     }
 
-    .art svg{
-      width: 100%;
-      height: 100%;
+    .stroke-gold{ stroke: rgba(249,202,59,.92); stroke-width: 2.6; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+    .stroke-gold-soft{ stroke: rgba(200,166,75,.55); stroke-width: 2.0; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+
+    /* Restore the footer stamps on the FRONT too */
+    .front-footer{
+      position:absolute;
+      left: 14px;
+      right: 14px;
+      bottom: 14px;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      z-index:2;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-size: 11px;
+      color: rgba(243,243,243,.72);
+      letter-spacing:.3px;
+    }
+    .stamp{
+      display:inline-block;
+      padding: 6px 8px;
+      border-radius: 10px;
+      border: 1px solid rgba(200,166,75,.45);
+      background: rgba(0,0,0,.35);
+      color: rgba(249,202,59,.92);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .7px;
+      font-size: 10px;
     }
 
-    .stroke-gold{
-      stroke: rgba(249,202,59,.92);
-      stroke-width: 2.3;
-      fill: none;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .stroke-gold-soft{
-      stroke: rgba(200,166,75,.55);
-      stroke-width: 1.6;
-      fill: none;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    /* BACK = text, title, divider, fortune */
+    /* CARD BACK: your requested text hierarchy */
     .back{
       transform: rotateY(180deg);
       background:
         radial-gradient(260px 220px at 50% 18%, rgba(249,202,59,.18), transparent 62%),
         linear-gradient(180deg, rgba(200,166,75,.18), rgba(10,10,10,.92));
       border-color: rgba(249,202,59,.65);
-      padding: 14px 14px 12px;
+      padding: 16px 14px 14px;
       gap: 10px;
     }
 
     .back-top{
       text-align:center;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      letter-spacing: .7px;
+      letter-spacing:.7px;
       text-transform: uppercase;
       font-size: 11px;
       color: rgba(249,202,59,.95);
-      font-weight: 800;
+      font-weight: 900;
     }
 
     .back-title{
       text-align:center;
       font-size: 15px;
       font-weight: 900;
-      letter-spacing: .4px;
+      letter-spacing:.4px;
       margin-top: 2px;
     }
 
@@ -312,19 +377,6 @@
       letter-spacing: .3px;
     }
 
-    .stamp{
-      display:inline-block;
-      padding: 6px 8px;
-      border-radius: 10px;
-      border: 1px solid rgba(200,166,75,.45);
-      background: rgba(0,0,0,.35);
-      color: rgba(249,202,59,.92);
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: .7px;
-      font-size: 10px;
-    }
-
     .card:focus-visible{
       outline: 2px solid rgba(249,202,59,.9);
       outline-offset: 4px;
@@ -332,20 +384,15 @@
     }
 
     @media (max-width: 860px){
-      :root{ --cardW: 155px; --cardH: 245px; }
+      :root{ --cardW: 162px; --cardH: 252px; --radius: 22px; }
     }
 
     @media (max-width: 720px){
-      /* Mobile: 2 columns */
-      .grid{
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        grid-template-rows: auto;
-      }
-      /* Let it flow naturally on mobile */
+      .grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .pos-1,.pos-2,.pos-3,.pos-4,.pos-5,.pos-6,.pos-7,.pos-8,.pos-9,.pos-10{
         grid-column:auto; grid-row:auto;
       }
-      .slot{ width: min(170px, 42vw); }
+      .slot{ width: min(180px, 42vw); }
     }
   </style>
 </head>
@@ -365,20 +412,23 @@
     </div>
 
     <div class="board">
-      <div class="grid" id="cardGrid">
+      <div class="grid">
 
-        <!-- CARD 1 -->
+        <!-- Helper: front SVGs are now all the SAME SIZE and style, so they won’t look “all over the place” -->
+
+        <!-- 1 -->
         <div class="slot pos-1">
-          <div class="card" tabindex="0" role="button" aria-label="Card 1" data-card="1">
+          <div class="card" tabindex="0" role="button" aria-label="Card 1" data-card="1" data-title="The Golden Knight" data-left="4ek" data-right="ucf">
             <div class="face front" aria-hidden="true">
-              <div class="art">
-                <!-- Knight helmet -->
-                <svg viewBox="0 0 120 160" aria-hidden="true" focusable="false">
-                  <path class="stroke-gold" d="M28 54c10-22 28-34 52-34 10 0 18 2 24 6 6 4 10 10 12 18l-6 8c-8-8-18-12-30-12-14 0-26 6-36 18v12h52c-6 18-18 34-36 48l-10 8-10-8c-10-8-18-18-24-30-2-4-3-8-4-12V54z"/>
-                  <path class="stroke-gold-soft" d="M46 72h30M52 88h24M60 104h16"/>
-                  <path class="stroke-gold-soft" d="M34 46l10 10M86 46l-10 10"/>
+              <div class="frame-outer"></div><div class="frame-inner"></div>
+              <div class="filigree"><span class="tl"></span><span class="br"></span></div>
+              <div class="sigil">
+                <svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+                  <path class="stroke-gold" d="M26 44c8-16 20-24 36-24 14 0 24 6 28 18l-6 8c-5-6-12-9-22-9-12 0-22 5-30 16v10h42c-5 14-14 26-28 36l-8 6-8-6c-9-7-16-16-20-26-2-4-2-7-2-10V44z"/>
+                  <path class="stroke-gold-soft" d="M38 62h24M42 72h20M46 82h12"/>
                 </svg>
               </div>
+              <div class="front-footer"><span class="stamp">4ek</span><span>ucf</span></div>
             </div>
             <div class="face back">
               <div class="back-top">Your fortune</div>
@@ -390,18 +440,19 @@
           </div>
         </div>
 
-        <!-- CARD 2 -->
+        <!-- 2 -->
         <div class="slot pos-2">
           <div class="card" tabindex="0" role="button" aria-label="Card 2" data-card="2">
             <div class="face front" aria-hidden="true">
-              <div class="art">
-                <!-- Griffin -->
-                <svg viewBox="0 0 120 160" aria-hidden="true" focusable="false">
-                  <path class="stroke-gold" d="M30 94c6-22 22-36 48-42l12-18 10 10-12 18c6 10 8 18 6 26-2 8-8 16-18 24l-10 8-14-4-8-10-14 2-8-6 8-8z"/>
-                  <path class="stroke-gold-soft" d="M56 64l-14-10M66 60l10-14M78 74l18-2"/>
-                  <path class="stroke-gold-soft" d="M54 96l10 10M48 104l-10 10"/>
+              <div class="frame-outer"></div><div class="frame-inner"></div>
+              <div class="filigree"><span class="tl"></span><span class="br"></span></div>
+              <div class="sigil">
+                <svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+                  <path class="stroke-gold" d="M28 62c4-14 14-24 30-28l10-14 8 8-10 14c4 7 5 13 4 18-2 6-6 12-14 18l-8 6-10-3-6-7-10 1-6-4 6-6z"/>
+                  <path class="stroke-gold-soft" d="M44 44l-10-7M58 40l7-10M62 58l14-2"/>
                 </svg>
               </div>
+              <div class="front-footer"><span class="stamp">4ek</span><span>ucf</span></div>
             </div>
             <div class="face back">
               <div class="back-top">Your fortune</div>
@@ -413,19 +464,20 @@
           </div>
         </div>
 
-        <!-- CARD 3 -->
+        <!-- 3 -->
         <div class="slot pos-3">
           <div class="card" tabindex="0" role="button" aria-label="Card 3" data-card="3">
             <div class="face front" aria-hidden="true">
-              <div class="art">
-                <!-- Scroll / RSVP -->
-                <svg viewBox="0 0 120 160" aria-hidden="true" focusable="false">
-                  <path class="stroke-gold" d="M38 44c-8 0-14 6-14 14s6 14 14 14h6V44h-6zM82 44h-6v28h6c8 0 14-6 14-14s-6-14-14-14z"/>
-                  <path class="stroke-gold" d="M44 44h32v72H44z"/>
-                  <path class="stroke-gold-soft" d="M52 62h16M52 76h20M52 90h14"/>
-                  <path class="stroke-gold-soft" d="M44 116c0 10 8 18 18 18h14"/>
+              <div class="frame-outer"></div><div class="frame-inner"></div>
+              <div class="filigree"><span class="tl"></span><span class="br"></span></div>
+              <div class="sigil">
+                <svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+                  <path class="stroke-gold" d="M34 30h32v52H34z"/>
+                  <path class="stroke-gold" d="M34 30c-8 0-14 6-14 14s6 14 14 14h2V30h-2zM66 30h-2v28h2c8 0 14-6 14-14s-6-14-14-14z"/>
+                  <path class="stroke-gold-soft" d="M40 44h20M40 54h22M40 64h16"/>
                 </svg>
               </div>
+              <div class="front-footer"><span class="stamp">4ek</span><span>ucf</span></div>
             </div>
             <div class="face back">
               <div class="back-top">Your fortune</div>
@@ -437,18 +489,20 @@
           </div>
         </div>
 
-        <!-- CARD 4 -->
+        <!-- 4 -->
         <div class="slot pos-4">
           <div class="card" tabindex="0" role="button" aria-label="Card 4" data-card="4">
             <div class="face front" aria-hidden="true">
-              <div class="art">
-                <!-- Mask / side character -->
-                <svg viewBox="0 0 120 160" aria-hidden="true" focusable="false">
-                  <path class="stroke-gold" d="M30 70c8-18 24-28 40-28s32 10 40 28c-6 30-20 50-40 60-20-10-34-30-40-60z"/>
-                  <path class="stroke-gold-soft" d="M48 74c4-4 10-4 14 0M72 74c4-4 10-4 14 0"/>
-                  <path class="stroke-gold-soft" d="M54 96c8 6 16 6 24 0"/>
+              <div class="frame-outer"></div><div class="frame-inner"></div>
+              <div class="filigree"><span class="tl"></span><span class="br"></span></div>
+              <div class="sigil">
+                <svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+                  <path class="stroke-gold" d="M24 50c6-14 18-22 26-22s20 8 26 22c-4 22-14 36-26 44-12-8-22-22-26-44z"/>
+                  <path class="stroke-gold-soft" d="M38 52c3-3 7-3 10 0M52 52c3-3 7-3 10 0"/>
+                  <path class="stroke-gold-soft" d="M40 68c6 4 12 4 20 0"/>
                 </svg>
               </div>
+              <div class="front-footer"><span class="stamp">4ek</span><span>ucf</span></div>
             </div>
             <div class="face back">
               <div class="back-top">Your fortune</div>
@@ -460,17 +514,18 @@
           </div>
         </div>
 
-        <!-- CARD 5 (Row 2 Col 2) -->
+        <!-- 5 (center row col2) -->
         <div class="slot pos-5">
           <div class="card" tabindex="0" role="button" aria-label="Card 5" data-card="5">
             <div class="face front" aria-hidden="true">
-              <div class="art">
-                <!-- Heart / glad I came -->
-                <svg viewBox="0 0 120 160" aria-hidden="true" focusable="false">
-                  <path class="stroke-gold" d="M60 126C34 110 26 92 26 76c0-14 10-24 24-24 8 0 14 4 18 10 4-6 10-10 18-10 14 0 24 10 24 24 0 16-8 34-34 50z"/>
-                  <path class="stroke-gold-soft" d="M44 70c4-4 10-4 14 0M76 70c4-4 10-4 14 0"/>
+              <div class="frame-outer"></div><div class="frame-inner"></div>
+              <div class="filigree"><span class="tl"></span><span class="br"></span></div>
+              <div class="sigil">
+                <svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+                  <path class="stroke-gold" d="M50 84C30 72 24 58 24 46c0-10 8-18 18-18 6 0 11 3 14 8 3-5 8-8 14-8 10 0 18 8 18 18 0 12-6 26-26 38z"/>
                 </svg>
               </div>
+              <div class="front-footer"><span class="stamp">4ek</span><span>ucf</span></div>
             </div>
             <div class="face back">
               <div class="back-top">Your fortune</div>
@@ -482,18 +537,19 @@
           </div>
         </div>
 
-        <!-- CARD 6 (Row 2 Col 3) -->
+        <!-- 6 (center row col3) -->
         <div class="slot pos-6">
           <div class="card" tabindex="0" role="button" aria-label="Card 6" data-card="6">
             <div class="face front" aria-hidden="true">
-              <div class="art">
-                <!-- Clock / 30 hours early -->
-                <svg viewBox="0 0 120 160" aria-hidden="true" focusable="false">
-                  <path class="stroke-gold" d="M60 40c26 0 46 20 46 46s-20 46-46 46-46-20-46-46 20-46 46-46z"/>
-                  <path class="stroke-gold-soft" d="M60 54v34l22 10"/>
-                  <path class="stroke-gold-soft" d="M44 36l-10-10M76 36l10-10"/>
+              <div class="frame-outer"></div><div class="frame-inner"></div>
+              <div class="filigree"><span class="tl"></span><span class="br"></span></div>
+              <div class="sigil">
+                <svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+                  <path class="stroke-gold" d="M50 24c18 0 32 14 32 32S68 88 50 88 18 74 18 56s14-32 32-32z"/>
+                  <path class="stroke-gold-soft" d="M50 36v24l16 8"/>
                 </svg>
               </div>
+              <div class="front-footer"><span class="stamp">4ek</span><span>ucf</span></div>
             </div>
             <div class="face back">
               <div class="back-top">Your fortune</div>
@@ -505,18 +561,20 @@
           </div>
         </div>
 
-        <!-- CARD 7 -->
+        <!-- 7 -->
         <div class="slot pos-7">
           <div class="card" tabindex="0" role="button" aria-label="Card 7" data-card="7">
             <div class="face front" aria-hidden="true">
-              <div class="art">
-                <!-- Book / academic weapon -->
-                <svg viewBox="0 0 120 160" aria-hidden="true" focusable="false">
-                  <path class="stroke-gold" d="M34 50c10-6 22-6 36 0v76c-14-6-26-6-36 0V50z"/>
-                  <path class="stroke-gold" d="M86 50c-10-6-22-6-36 0v76c14-6 26-6 36 0V50z"/>
-                  <path class="stroke-gold-soft" d="M40 66h22M40 80h22M40 94h18"/>
+              <div class="frame-outer"></div><div class="frame-inner"></div>
+              <div class="filigree"><span class="tl"></span><span class="br"></span></div>
+              <div class="sigil">
+                <svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+                  <path class="stroke-gold" d="M28 30c8-5 18-5 30 0v50c-12-5-22-5-30 0V30z"/>
+                  <path class="stroke-gold" d="M72 30c-8-5-18-5-30 0v50c12-5 22-5 30 0V30z"/>
+                  <path class="stroke-gold-soft" d="M34 42h16M34 52h18M34 62h12"/>
                 </svg>
               </div>
+              <div class="front-footer"><span class="stamp">4ek</span><span>ucf</span></div>
             </div>
             <div class="face back">
               <div class="back-top">Your fortune</div>
@@ -528,19 +586,20 @@
           </div>
         </div>
 
-        <!-- CARD 8 -->
+        <!-- 8 -->
         <div class="slot pos-8">
           <div class="card" tabindex="0" role="button" aria-label="Card 8" data-card="8">
             <div class="face front" aria-hidden="true">
-              <div class="art">
-                <!-- Fork & star / free food -->
-                <svg viewBox="0 0 120 160" aria-hidden="true" focusable="false">
-                  <path class="stroke-gold" d="M42 38v28c0 8-6 14-14 14h0V38"/>
-                  <path class="stroke-gold-soft" d="M28 38v18M34 38v18M40 38v18"/>
-                  <path class="stroke-gold" d="M70 38v42c0 8-6 14-14 14h0"/>
-                  <path class="stroke-gold-soft" d="M84 98l6 10 12 2-9 8 2 12-11-6-11 6 2-12-9-8 12-2z"/>
+              <div class="frame-outer"></div><div class="frame-inner"></div>
+              <div class="filigree"><span class="tl"></span><span class="br"></span></div>
+              <div class="sigil">
+                <svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+                  <path class="stroke-gold" d="M34 26v24c0 6-5 11-11 11V26"/>
+                  <path class="stroke-gold-soft" d="M23 26v16M28 26v16M33 26v16"/>
+                  <path class="stroke-gold-soft" d="M66 64l4 7 9 1-6 5 1 9-8-4-8 4 1-9-6-5 9-1z"/>
                 </svg>
               </div>
+              <div class="front-footer"><span class="stamp">4ek</span><span>ucf</span></div>
             </div>
             <div class="face back">
               <div class="back-top">Your fortune</div>
@@ -552,18 +611,19 @@
           </div>
         </div>
 
-        <!-- CARD 9 -->
+        <!-- 9 -->
         <div class="slot pos-9">
           <div class="card" tabindex="0" role="button" aria-label="Card 9" data-card="9">
             <div class="face front" aria-hidden="true">
-              <div class="art">
-                <!-- Spark / memory -->
-                <svg viewBox="0 0 120 160" aria-hidden="true" focusable="false">
-                  <path class="stroke-gold" d="M60 34l10 26 26 10-26 10-10 26-10-26-26-10 26-10z"/>
-                  <path class="stroke-gold-soft" d="M60 98v28M60 22v10M22 80h10M88 80h10"/>
-                  <path class="stroke-gold-soft" d="M34 104l-8 8M86 104l8 8M34 56l-8-8M86 56l8-8"/>
+              <div class="frame-outer"></div><div class="frame-inner"></div>
+              <div class="filigree"><span class="tl"></span><span class="br"></span></div>
+              <div class="sigil">
+                <svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+                  <path class="stroke-gold" d="M50 18l7 18 18 7-18 7-7 18-7-18-18-7 18-7z"/>
+                  <path class="stroke-gold-soft" d="M50 64v18M50 10v6M10 43h6M84 43h6"/>
                 </svg>
               </div>
+              <div class="front-footer"><span class="stamp">4ek</span><span>ucf</span></div>
             </div>
             <div class="face back">
               <div class="back-top">Your fortune</div>
@@ -575,19 +635,20 @@
           </div>
         </div>
 
-        <!-- CARD 10 -->
+        <!-- 10 -->
         <div class="slot pos-10">
           <div class="card" tabindex="0" role="button" aria-label="Card 10" data-card="10">
             <div class="face front" aria-hidden="true">
-              <div class="art">
-                <!-- Megaphone / recruitment -->
-                <svg viewBox="0 0 120 160" aria-hidden="true" focusable="false">
-                  <path class="stroke-gold" d="M30 86l10-18 46-18v54l-46-18-10-18z"/>
-                  <path class="stroke-gold-soft" d="M86 62l12-6v48l-12-6"/>
-                  <path class="stroke-gold-soft" d="M40 92l10 22c2 4 0 8-4 10l-6 2-12-28"/>
-                  <path class="stroke-gold-soft" d="M92 80h18M90 70l16-10M90 90l16 10"/>
+              <div class="frame-outer"></div><div class="frame-inner"></div>
+              <div class="filigree"><span class="tl"></span><span class="br"></span></div>
+              <div class="sigil">
+                <svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+                  <path class="stroke-gold" d="M22 58l8-14 38-14v42l-38-14-8-14z"/>
+                  <path class="stroke-gold-soft" d="M68 44l10-5v32l-10-5"/>
+                  <path class="stroke-gold-soft" d="M30 64l8 18c2 4 0 7-3 8l-5 2-10-23"/>
                 </svg>
               </div>
+              <div class="front-footer"><span class="stamp">4ek</span><span>ucf</span></div>
             </div>
             <div class="face back">
               <div class="back-top">Your fortune</div>
@@ -604,7 +665,6 @@
   </div>
 
   <script>
-    // Fixed fortunes per card (consistent sentence case)
     const fortunes = {
       1: "You will meet a new friend in the Philanthropy Cab (golf cart).",
       2: "You will find Knightro (Day of Giving).",
@@ -621,7 +681,6 @@
     const statusText = document.getElementById("statusText");
     const resetBtn = document.getElementById("resetBtn");
     const cards = Array.from(document.querySelectorAll(".card"));
-
     let chosenCard = null;
 
     function setStatus(msg){ statusText.textContent = msg || ""; }
@@ -630,7 +689,7 @@
       cards.forEach(c => {
         if (c !== exceptCard){
           c.classList.add("is-locked");
-          c.setAttribute("aria-disabled", "true");
+          c.setAttribute("aria-disabled","true");
         }
       });
     }
@@ -655,7 +714,6 @@
 
       const n = Number(card.dataset.card);
       const text = fortunes[n] || "Your fortune awaits.";
-
       card.querySelectorAll(".fortune-text").forEach(t => t.textContent = text);
 
       card.classList.add("is-flipped");
@@ -675,7 +733,6 @@
     });
 
     resetBtn.addEventListener("click", resetDeck);
-
     setStatus("Click on a card to receive a fortune.");
   </script>
 </body>
