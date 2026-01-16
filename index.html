@@ -4,7 +4,6 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>4EK Tarot Fortune</title>
-  <meta name="description" content="Pick a card to receive your 4EK fortune." />
 
   <style>
     :root{
@@ -13,12 +12,10 @@
       --panel: rgba(16,16,16,.78);
       --gold: #C8A64B;
       --gold2:#F9CA3B;
-      --ink: #0B0B0B;
       --text: #F3F3F3;
       --muted: rgba(243,243,243,.78);
       --line: rgba(200,166,75,.35);
 
-      /* sizing */
       --cardW: 170px;
       --cardH: 260px;
       --radius: 18px;
@@ -54,7 +51,6 @@
       position: relative;
       overflow: hidden;
     }
-
     .header:before{
       content:"";
       position:absolute;
@@ -77,7 +73,7 @@
     .subtitle{
       position:relative;
       margin: 8px auto 0;
-      max-width: 54ch;
+      max-width: 62ch;
       text-align:center;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       font-size: 14px;
@@ -126,15 +122,16 @@
       border: 1px solid var(--line);
       border-radius: 24px;
       background: rgba(10,10,10,.55);
-      padding: 20px 10px 24px;
+      padding: 22px 14px 26px;
       box-shadow: 0 18px 50px rgba(0,0,0,.35);
     }
 
-    /* 4 columns. Middle row uses cols 2 and 3 (centered). */
+    /* TRUE 4x3 grid with empty 2A and 2D */
     .grid{
       display:grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 16px;
+      grid-template-rows: auto auto auto;
+      gap: 18px 16px;
       justify-items: center;
       align-items: start;
     }
@@ -145,11 +142,24 @@
       perspective: 1200px;
     }
 
-    /* Place middle row cards in center columns */
-    .mid-left{ grid-column: 2; }
-    .mid-right{ grid-column: 3; }
+    /* Place cards into exact cells:
+       Row 1: 1-4
+       Row 2: empty, 5, 6, empty
+       Row 3: 7-10
+    */
+    .pos-1{ grid-column:1; grid-row:1; }
+    .pos-2{ grid-column:2; grid-row:1; }
+    .pos-3{ grid-column:3; grid-row:1; }
+    .pos-4{ grid-column:4; grid-row:1; }
 
-    /* Card */
+    .pos-5{ grid-column:2; grid-row:2; }
+    .pos-6{ grid-column:3; grid-row:2; }
+
+    .pos-7{ grid-column:1; grid-row:3; }
+    .pos-8{ grid-column:2; grid-row:3; }
+    .pos-9{ grid-column:3; grid-row:3; }
+    .pos-10{ grid-column:4; grid-row:3; }
+
     .card{
       width: 100%;
       height: 100%;
@@ -177,92 +187,128 @@
       box-shadow: 0 14px 40px rgba(0,0,0,.45);
     }
 
+    /* FRONT = tarot-back illustration, NO WORDS */
     .front{
       background:
-        radial-gradient(300px 240px at 30% 20%, rgba(249,202,59,.16), transparent 55%),
-        radial-gradient(320px 260px at 70% 80%, rgba(200,166,75,.10), transparent 58%),
-        linear-gradient(180deg, rgba(14,14,14,.92), rgba(6,6,6,.92));
+        radial-gradient(320px 260px at 50% 30%, rgba(249,202,59,.14), transparent 62%),
+        repeating-linear-gradient(135deg, transparent 0 11px, rgba(200,166,75,.05) 11px 12px),
+        linear-gradient(180deg, rgba(12,12,12,.95), rgba(4,4,4,.96));
+      position: relative;
+      display:flex;
+      align-items:center;
+      justify-content:center;
     }
 
+    .front:before{
+      content:"";
+      position:absolute;
+      inset:12px;
+      border-radius: calc(var(--radius) - 8px);
+      border: 1px solid rgba(249,202,59,.35);
+      box-shadow: inset 0 0 0 1px rgba(200,166,75,.15);
+      pointer-events:none;
+    }
+
+    .front:after{
+      content:"";
+      position:absolute;
+      top: 18px;
+      left: 18px;
+      right: 18px;
+      bottom: 18px;
+      border-radius: calc(var(--radius) - 10px);
+      background:
+        radial-gradient(120px 120px at 50% 28%, rgba(200,166,75,.22), transparent 62%),
+        radial-gradient(130px 130px at 50% 72%, rgba(200,166,75,.18), transparent 62%);
+      pointer-events:none;
+      opacity:.9;
+    }
+
+    .art{
+      position: relative;
+      width: 78%;
+      height: 78%;
+      display:grid;
+      place-items:center;
+      z-index: 2;
+    }
+
+    .art svg{
+      width: 100%;
+      height: 100%;
+    }
+
+    .stroke-gold{
+      stroke: rgba(249,202,59,.92);
+      stroke-width: 2.3;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .stroke-gold-soft{
+      stroke: rgba(200,166,75,.55);
+      stroke-width: 1.6;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* BACK = text, title, divider, fortune */
     .back{
       transform: rotateY(180deg);
       background:
-        radial-gradient(240px 200px at 50% 15%, rgba(249,202,59,.18), transparent 62%),
-        linear-gradient(180deg, rgba(200,166,75,.22), rgba(10,10,10,.90));
+        radial-gradient(260px 220px at 50% 18%, rgba(249,202,59,.18), transparent 62%),
+        linear-gradient(180deg, rgba(200,166,75,.18), rgba(10,10,10,.92));
       border-color: rgba(249,202,59,.65);
+      padding: 14px 14px 12px;
+      gap: 10px;
     }
 
-    .ornament{
-      position:absolute;
-      inset:0;
-      pointer-events:none;
-      opacity:.9;
-      background:
-        repeating-linear-gradient(135deg, transparent 0 10px, rgba(200,166,75,.04) 10px 11px),
-        radial-gradient(110px 110px at 50% 34%, rgba(200,166,75,.18), transparent 60%);
-      mask-image: radial-gradient(circle at 50% 50%, black 55%, transparent 85%);
-    }
-
-    .topbar{
-      padding: 12px 12px 0;
-      display:flex;
-      align-items:center;
-      justify-content: space-between;
-      gap: 8px;
+    .back-top{
+      text-align:center;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      letter-spacing:.5px;
+      letter-spacing: .7px;
       text-transform: uppercase;
       font-size: 11px;
-      color: rgba(243,243,243,.78);
-    }
-
-    .sigil{
-      width: 34px; height: 34px;
-      border-radius: 999px;
-      border: 1px solid rgba(249,202,59,.70);
-      background:
-        radial-gradient(circle at 30% 30%, rgba(249,202,59,.25), transparent 55%),
-        rgba(0,0,0,.35);
-      display:grid;
-      place-items:center;
-      font-weight: 900;
       color: rgba(249,202,59,.95);
-      font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+      font-weight: 800;
     }
 
-    .cardname{
-      padding: 8px 14px 0;
-      font-size: 14px;
-      font-weight: 800;
+    .back-title{
       text-align:center;
-      letter-spacing:.6px;
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: .4px;
+      margin-top: 2px;
     }
 
     .divider{
-      margin: 10px auto 0;
+      margin: 6px auto 0;
       width: 72%;
       height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(249,202,59,.65), transparent);
-      opacity:.9;
+      background: linear-gradient(90deg, transparent, rgba(249,202,59,.70), transparent);
+      opacity:.95;
     }
 
-    .prompt{
-      padding: 12px 16px 0;
+    .fortune{
+      margin-top: 4px;
       text-align:center;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      font-size: 12px;
-      color: rgba(243,243,243,.72);
-      line-height: 1.35;
+      font-size: 14px;
+      line-height: 1.38;
+      color: rgba(243,243,243,.94);
+      padding: 0 6px;
     }
 
-    .bottom{
-      padding: 0 12px 12px;
+    .back-footer{
+      margin-top:auto;
       display:flex;
-      justify-content: space-between;
+      justify-content:space-between;
       align-items:flex-end;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       font-size: 11px;
-      color: rgba(243,243,243,.65);
+      color: rgba(243,243,243,.70);
       letter-spacing: .3px;
     }
 
@@ -279,50 +325,26 @@
       font-size: 10px;
     }
 
-    /* Fortune text */
-    .fortune{
-      padding: 14px 16px 0;
-      text-align:center;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      font-size: 14px;
-      line-height: 1.35;
-      color: rgba(243,243,243,.92);
-    }
-
-    .fortune strong{
-      color: rgba(249,202,59,.95);
-      letter-spacing:.4px;
-      text-transform: uppercase;
-      font-size: 11px;
-      display:block;
-      margin-bottom: 8px;
-    }
-
-    .smallprint{
-      padding: 10px 16px 0;
-      text-align:center;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      font-size: 12px;
-      color: rgba(243,243,243,.70);
-      line-height: 1.35;
-    }
-
-    /* Accessibility focus */
     .card:focus-visible{
       outline: 2px solid rgba(249,202,59,.9);
       outline-offset: 4px;
       border-radius: var(--radius);
     }
 
-    /* Responsive */
     @media (max-width: 860px){
       :root{ --cardW: 155px; --cardH: 245px; }
     }
 
     @media (max-width: 720px){
-      /* On small screens: 2 columns, maintain the 10-card count with nice spacing */
-      .grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .mid-left, .mid-right{ grid-column: auto; }
+      /* Mobile: 2 columns */
+      .grid{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: auto;
+      }
+      /* Let it flow naturally on mobile */
+      .pos-1,.pos-2,.pos-3,.pos-4,.pos-5,.pos-6,.pos-7,.pos-8,.pos-9,.pos-10{
+        grid-column:auto; grid-row:auto;
+      }
       .slot{ width: min(170px, 42vw); }
     }
   </style>
@@ -333,228 +355,246 @@
     <div class="header">
       <h1 class="title">4EK Tarot Fortune</h1>
       <p class="subtitle">
-        Welcome back, Knights. Click one card to reveal your semester fortune.
-        After you choose, the deck locks — hit reset to draw again.
+        Instructions: click one card to receive your fortune. After you choose, the deck locks.
+        Press reset to draw again.
       </p>
-
       <div class="controls">
         <button class="btn" id="resetBtn" type="button">Reset deck</button>
       </div>
-
       <div class="status" id="statusText" aria-live="polite"></div>
     </div>
 
-    <div class="board" aria-label="Tarot fortune card grid">
+    <div class="board">
       <div class="grid" id="cardGrid">
-        <!-- Top row (4) -->
-        <div class="slot">
+
+        <!-- CARD 1 -->
+        <div class="slot pos-1">
           <div class="card" tabindex="0" role="button" aria-label="Card 1" data-card="1">
-            <div class="face front">
-              <div class="ornament"></div>
-              <div class="topbar"><span>arcana</span><span class="sigil">Ⅰ</span></div>
-              <div>
-                <div class="cardname">The Golden Knight</div>
-                <div class="divider"></div>
-                <div class="prompt">Click to reveal your fortune.</div>
+            <div class="face front" aria-hidden="true">
+              <div class="art">
+                <!-- Knight helmet -->
+                <svg viewBox="0 0 120 160" aria-hidden="true" focusable="false">
+                  <path class="stroke-gold" d="M28 54c10-22 28-34 52-34 10 0 18 2 24 6 6 4 10 10 12 18l-6 8c-8-8-18-12-30-12-14 0-26 6-36 18v12h52c-6 18-18 34-36 48l-10 8-10-8c-10-8-18-18-24-30-2-4-3-8-4-12V54z"/>
+                  <path class="stroke-gold-soft" d="M46 72h30M52 88h24M60 104h16"/>
+                  <path class="stroke-gold-soft" d="M34 46l10 10M86 46l-10 10"/>
+                </svg>
               </div>
-              <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
             </div>
             <div class="face back">
-              <div class="topbar"><span>revealed</span><span class="sigil">Ⅰ</span></div>
-              <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
-              <div class="smallprint">May your semester be bold, bright, and very 4EK.</div>
-              <div class="bottom"><span class="stamp">fixed</span><span>card 1</span></div>
+              <div class="back-top">Your fortune</div>
+              <div class="back-title">The Golden Knight</div>
+              <div class="divider"></div>
+              <div class="fortune fortune-text"></div>
+              <div class="back-footer"><span class="stamp">4ek</span><span>card 1</span></div>
             </div>
           </div>
         </div>
 
-        <div class="slot">
+        <!-- CARD 2 -->
+        <div class="slot pos-2">
           <div class="card" tabindex="0" role="button" aria-label="Card 2" data-card="2">
-            <div class="face front">
-              <div class="ornament"></div>
-              <div class="topbar"><span>arcana</span><span class="sigil">Ⅱ</span></div>
-              <div>
-                <div class="cardname">The Griffin’s Trace</div>
-                <div class="divider"></div>
-                <div class="prompt">Click to reveal your fortune.</div>
+            <div class="face front" aria-hidden="true">
+              <div class="art">
+                <!-- Griffin -->
+                <svg viewBox="0 0 120 160" aria-hidden="true" focusable="false">
+                  <path class="stroke-gold" d="M30 94c6-22 22-36 48-42l12-18 10 10-12 18c6 10 8 18 6 26-2 8-8 16-18 24l-10 8-14-4-8-10-14 2-8-6 8-8z"/>
+                  <path class="stroke-gold-soft" d="M56 64l-14-10M66 60l10-14M78 74l18-2"/>
+                  <path class="stroke-gold-soft" d="M54 96l10 10M48 104l-10 10"/>
+                </svg>
               </div>
-              <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
             </div>
             <div class="face back">
-              <div class="topbar"><span>revealed</span><span class="sigil">Ⅱ</span></div>
-              <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
-              <div class="smallprint">May your semester be bold, bright, and very 4EK.</div>
-              <div class="bottom"><span class="stamp">fixed</span><span>card 2</span></div>
+              <div class="back-top">Your fortune</div>
+              <div class="back-title">The Griffin’s Trace</div>
+              <div class="divider"></div>
+              <div class="fortune fortune-text"></div>
+              <div class="back-footer"><span class="stamp">ucf</span><span>card 2</span></div>
             </div>
           </div>
         </div>
 
-        <div class="slot">
+        <!-- CARD 3 -->
+        <div class="slot pos-3">
           <div class="card" tabindex="0" role="button" aria-label="Card 3" data-card="3">
-            <div class="face front">
-              <div class="ornament"></div>
-              <div class="topbar"><span>arcana</span><span class="sigil">Ⅲ</span></div>
-              <div>
-                <div class="cardname">The RSVP Omen</div>
-                <div class="divider"></div>
-                <div class="prompt">Click to reveal your fortune.</div>
+            <div class="face front" aria-hidden="true">
+              <div class="art">
+                <!-- Scroll / RSVP -->
+                <svg viewBox="0 0 120 160" aria-hidden="true" focusable="false">
+                  <path class="stroke-gold" d="M38 44c-8 0-14 6-14 14s6 14 14 14h6V44h-6zM82 44h-6v28h6c8 0 14-6 14-14s-6-14-14-14z"/>
+                  <path class="stroke-gold" d="M44 44h32v72H44z"/>
+                  <path class="stroke-gold-soft" d="M52 62h16M52 76h20M52 90h14"/>
+                  <path class="stroke-gold-soft" d="M44 116c0 10 8 18 18 18h14"/>
+                </svg>
               </div>
-              <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
             </div>
             <div class="face back">
-              <div class="topbar"><span>revealed</span><span class="sigil">Ⅲ</span></div>
-              <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
-              <div class="smallprint">May your semester be bold, bright, and very 4EK.</div>
-              <div class="bottom"><span class="stamp">fixed</span><span>card 3</span></div>
+              <div class="back-top">Your fortune</div>
+              <div class="back-title">The RSVP Omen</div>
+              <div class="divider"></div>
+              <div class="fortune fortune-text"></div>
+              <div class="back-footer"><span class="stamp">4ek</span><span>card 3</span></div>
             </div>
           </div>
         </div>
 
-        <div class="slot">
+        <!-- CARD 4 -->
+        <div class="slot pos-4">
           <div class="card" tabindex="0" role="button" aria-label="Card 4" data-card="4">
-            <div class="face front">
-              <div class="ornament"></div>
-              <div class="topbar"><span>arcana</span><span class="sigil">Ⅳ</span></div>
-              <div>
-                <div class="cardname">The Side Character</div>
-                <div class="divider"></div>
-                <div class="prompt">Click to reveal your fortune.</div>
+            <div class="face front" aria-hidden="true">
+              <div class="art">
+                <!-- Mask / side character -->
+                <svg viewBox="0 0 120 160" aria-hidden="true" focusable="false">
+                  <path class="stroke-gold" d="M30 70c8-18 24-28 40-28s32 10 40 28c-6 30-20 50-40 60-20-10-34-30-40-60z"/>
+                  <path class="stroke-gold-soft" d="M48 74c4-4 10-4 14 0M72 74c4-4 10-4 14 0"/>
+                  <path class="stroke-gold-soft" d="M54 96c8 6 16 6 24 0"/>
+                </svg>
               </div>
-              <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
             </div>
             <div class="face back">
-              <div class="topbar"><span>revealed</span><span class="sigil">Ⅳ</span></div>
-              <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
-              <div class="smallprint">May your semester be bold, bright, and very 4EK.</div>
-              <div class="bottom"><span class="stamp">fixed</span><span>card 4</span></div>
+              <div class="back-top">Your fortune</div>
+              <div class="back-title">The Side Character</div>
+              <div class="divider"></div>
+              <div class="fortune fortune-text"></div>
+              <div class="back-footer"><span class="stamp">ucf</span><span>card 4</span></div>
             </div>
           </div>
         </div>
 
-        <!-- Middle row (2 centered) -->
-        <div class="slot mid-left">
+        <!-- CARD 5 (Row 2 Col 2) -->
+        <div class="slot pos-5">
           <div class="card" tabindex="0" role="button" aria-label="Card 5" data-card="5">
-            <div class="face front">
-              <div class="ornament"></div>
-              <div class="topbar"><span>arcana</span><span class="sigil">Ⅴ</span></div>
-              <div>
-                <div class="cardname">The “Glad I Came”</div>
-                <div class="divider"></div>
-                <div class="prompt">Click to reveal your fortune.</div>
+            <div class="face front" aria-hidden="true">
+              <div class="art">
+                <!-- Heart / glad I came -->
+                <svg viewBox="0 0 120 160" aria-hidden="true" focusable="false">
+                  <path class="stroke-gold" d="M60 126C34 110 26 92 26 76c0-14 10-24 24-24 8 0 14 4 18 10 4-6 10-10 18-10 14 0 24 10 24 24 0 16-8 34-34 50z"/>
+                  <path class="stroke-gold-soft" d="M44 70c4-4 10-4 14 0M76 70c4-4 10-4 14 0"/>
+                </svg>
               </div>
-              <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
             </div>
             <div class="face back">
-              <div class="topbar"><span>revealed</span><span class="sigil">Ⅴ</span></div>
-              <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
-              <div class="smallprint">May your semester be bold, bright, and very 4EK.</div>
-              <div class="bottom"><span class="stamp">fixed</span><span>card 5</span></div>
+              <div class="back-top">Your fortune</div>
+              <div class="back-title">The “Glad I Came”</div>
+              <div class="divider"></div>
+              <div class="fortune fortune-text"></div>
+              <div class="back-footer"><span class="stamp">4ek</span><span>card 5</span></div>
             </div>
           </div>
         </div>
 
-        <div class="slot mid-right">
+        <!-- CARD 6 (Row 2 Col 3) -->
+        <div class="slot pos-6">
           <div class="card" tabindex="0" role="button" aria-label="Card 6" data-card="6">
-            <div class="face front">
-              <div class="ornament"></div>
-              <div class="topbar"><span>arcana</span><span class="sigil">Ⅵ</span></div>
-              <div>
-                <div class="cardname">The 30-Hour Spell</div>
-                <div class="divider"></div>
-                <div class="prompt">Click to reveal your fortune.</div>
+            <div class="face front" aria-hidden="true">
+              <div class="art">
+                <!-- Clock / 30 hours early -->
+                <svg viewBox="0 0 120 160" aria-hidden="true" focusable="false">
+                  <path class="stroke-gold" d="M60 40c26 0 46 20 46 46s-20 46-46 46-46-20-46-46 20-46 46-46z"/>
+                  <path class="stroke-gold-soft" d="M60 54v34l22 10"/>
+                  <path class="stroke-gold-soft" d="M44 36l-10-10M76 36l10-10"/>
+                </svg>
               </div>
-              <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
             </div>
             <div class="face back">
-              <div class="topbar"><span>revealed</span><span class="sigil">Ⅵ</span></div>
-              <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
-              <div class="smallprint">May your semester be bold, bright, and very 4EK.</div>
-              <div class="bottom"><span class="stamp">fixed</span><span>card 6</span></div>
+              <div class="back-top">Your fortune</div>
+              <div class="back-title">The 30-Hour Spell</div>
+              <div class="divider"></div>
+              <div class="fortune fortune-text"></div>
+              <div class="back-footer"><span class="stamp">ucf</span><span>card 6</span></div>
             </div>
           </div>
         </div>
 
-        <!-- Bottom row (4) -->
-        <div class="slot">
+        <!-- CARD 7 -->
+        <div class="slot pos-7">
           <div class="card" tabindex="0" role="button" aria-label="Card 7" data-card="7">
-            <div class="face front">
-              <div class="ornament"></div>
-              <div class="topbar"><span>arcana</span><span class="sigil">Ⅶ</span></div>
-              <div>
-                <div class="cardname">The Study Social</div>
-                <div class="divider"></div>
-                <div class="prompt">Click to reveal your fortune.</div>
+            <div class="face front" aria-hidden="true">
+              <div class="art">
+                <!-- Book / academic weapon -->
+                <svg viewBox="0 0 120 160" aria-hidden="true" focusable="false">
+                  <path class="stroke-gold" d="M34 50c10-6 22-6 36 0v76c-14-6-26-6-36 0V50z"/>
+                  <path class="stroke-gold" d="M86 50c-10-6-22-6-36 0v76c14-6 26-6 36 0V50z"/>
+                  <path class="stroke-gold-soft" d="M40 66h22M40 80h22M40 94h18"/>
+                </svg>
               </div>
-              <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
             </div>
             <div class="face back">
-              <div class="topbar"><span>revealed</span><span class="sigil">Ⅶ</span></div>
-              <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
-              <div class="smallprint">May your semester be bold, bright, and very 4EK.</div>
-              <div class="bottom"><span class="stamp">fixed</span><span>card 7</span></div>
+              <div class="back-top">Your fortune</div>
+              <div class="back-title">The Study Social</div>
+              <div class="divider"></div>
+              <div class="fortune fortune-text"></div>
+              <div class="back-footer"><span class="stamp">4ek</span><span>card 7</span></div>
             </div>
           </div>
         </div>
 
-        <div class="slot">
+        <!-- CARD 8 -->
+        <div class="slot pos-8">
           <div class="card" tabindex="0" role="button" aria-label="Card 8" data-card="8">
-            <div class="face front">
-              <div class="ornament"></div>
-              <div class="topbar"><span>arcana</span><span class="sigil">Ⅷ</span></div>
-              <div>
-                <div class="cardname">The Free-Food Aura</div>
-                <div class="divider"></div>
-                <div class="prompt">Click to reveal your fortune.</div>
+            <div class="face front" aria-hidden="true">
+              <div class="art">
+                <!-- Fork & star / free food -->
+                <svg viewBox="0 0 120 160" aria-hidden="true" focusable="false">
+                  <path class="stroke-gold" d="M42 38v28c0 8-6 14-14 14h0V38"/>
+                  <path class="stroke-gold-soft" d="M28 38v18M34 38v18M40 38v18"/>
+                  <path class="stroke-gold" d="M70 38v42c0 8-6 14-14 14h0"/>
+                  <path class="stroke-gold-soft" d="M84 98l6 10 12 2-9 8 2 12-11-6-11 6 2-12-9-8 12-2z"/>
+                </svg>
               </div>
-              <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
             </div>
             <div class="face back">
-              <div class="topbar"><span>revealed</span><span class="sigil">Ⅷ</span></div>
-              <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
-              <div class="smallprint">May your semester be bold, bright, and very 4EK.</div>
-              <div class="bottom"><span class="stamp">fixed</span><span>card 8</span></div>
+              <div class="back-top">Your fortune</div>
+              <div class="back-title">The Free-Food Aura</div>
+              <div class="divider"></div>
+              <div class="fortune fortune-text"></div>
+              <div class="back-footer"><span class="stamp">ucf</span><span>card 8</span></div>
             </div>
           </div>
         </div>
 
-        <div class="slot">
+        <!-- CARD 9 -->
+        <div class="slot pos-9">
           <div class="card" tabindex="0" role="button" aria-label="Card 9" data-card="9">
-            <div class="face front">
-              <div class="ornament"></div>
-              <div class="topbar"><span>arcana</span><span class="sigil">Ⅸ</span></div>
-              <div>
-                <div class="cardname">The “You Had To Be There”</div>
-                <div class="divider"></div>
-                <div class="prompt">Click to reveal your fortune.</div>
+            <div class="face front" aria-hidden="true">
+              <div class="art">
+                <!-- Spark / memory -->
+                <svg viewBox="0 0 120 160" aria-hidden="true" focusable="false">
+                  <path class="stroke-gold" d="M60 34l10 26 26 10-26 10-10 26-10-26-26-10 26-10z"/>
+                  <path class="stroke-gold-soft" d="M60 98v28M60 22v10M22 80h10M88 80h10"/>
+                  <path class="stroke-gold-soft" d="M34 104l-8 8M86 104l8 8M34 56l-8-8M86 56l8-8"/>
+                </svg>
               </div>
-              <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
             </div>
             <div class="face back">
-              <div class="topbar"><span>revealed</span><span class="sigil">Ⅸ</span></div>
-              <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
-              <div class="smallprint">May your semester be bold, bright, and very 4EK.</div>
-              <div class="bottom"><span class="stamp">fixed</span><span>card 9</span></div>
+              <div class="back-top">Your fortune</div>
+              <div class="back-title">The “You Had To Be There”</div>
+              <div class="divider"></div>
+              <div class="fortune fortune-text"></div>
+              <div class="back-footer"><span class="stamp">4ek</span><span>card 9</span></div>
             </div>
           </div>
         </div>
 
-        <div class="slot">
+        <!-- CARD 10 -->
+        <div class="slot pos-10">
           <div class="card" tabindex="0" role="button" aria-label="Card 10" data-card="10">
-            <div class="face front">
-              <div class="ornament"></div>
-              <div class="topbar"><span>arcana</span><span class="sigil">Ⅹ</span></div>
-              <div>
-                <div class="cardname">The Recruitment MVP</div>
-                <div class="divider"></div>
-                <div class="prompt">Click to reveal your fortune.</div>
+            <div class="face front" aria-hidden="true">
+              <div class="art">
+                <!-- Megaphone / recruitment -->
+                <svg viewBox="0 0 120 160" aria-hidden="true" focusable="false">
+                  <path class="stroke-gold" d="M30 86l10-18 46-18v54l-46-18-10-18z"/>
+                  <path class="stroke-gold-soft" d="M86 62l12-6v48l-12-6"/>
+                  <path class="stroke-gold-soft" d="M40 92l10 22c2 4 0 8-4 10l-6 2-12-28"/>
+                  <path class="stroke-gold-soft" d="M92 80h18M90 70l16-10M90 90l16 10"/>
+                </svg>
               </div>
-              <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
             </div>
             <div class="face back">
-              <div class="topbar"><span>revealed</span><span class="sigil">Ⅹ</span></div>
-              <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
-              <div class="smallprint">May your semester be bold, bright, and very 4EK.</div>
-              <div class="bottom"><span class="stamp">fixed</span><span>card 10</span></div>
+              <div class="back-top">Your fortune</div>
+              <div class="back-title">The Recruitment MVP</div>
+              <div class="divider"></div>
+              <div class="fortune fortune-text"></div>
+              <div class="back-footer"><span class="stamp">ucf</span><span>card 10</span></div>
             </div>
           </div>
         </div>
@@ -564,7 +604,7 @@
   </div>
 
   <script>
-    // Fixed fortunes per card (1..10)
+    // Fixed fortunes per card (consistent sentence case)
     const fortunes = {
       1: "You will meet a new friend in the Philanthropy Cab (golf cart).",
       2: "You will find Knightro (Day of Giving).",
@@ -582,11 +622,9 @@
     const resetBtn = document.getElementById("resetBtn");
     const cards = Array.from(document.querySelectorAll(".card"));
 
-    let chosenCard = null; // lock deck after first pick
+    let chosenCard = null;
 
-    function setStatus(msg){
-      statusText.textContent = msg || "";
-    }
+    function setStatus(msg){ statusText.textContent = msg || ""; }
 
     function lockOthers(exceptCard){
       cards.forEach(c => {
@@ -608,26 +646,24 @@
       chosenCard = null;
       cards.forEach(c => c.classList.remove("is-flipped"));
       unlockAll();
-      setStatus("");
+      setStatus("Click on a card to receive a fortune.");
     }
 
     function reveal(card){
       if (card.classList.contains("is-locked")) return;
-      if (chosenCard && chosenCard !== card) return; // hard lock
+      if (chosenCard && chosenCard !== card) return;
 
       const n = Number(card.dataset.card);
       const text = fortunes[n] || "Your fortune awaits.";
 
-      const targets = card.querySelectorAll(".fortune-text");
-      targets.forEach(t => t.textContent = text);
+      card.querySelectorAll(".fortune-text").forEach(t => t.textContent = text);
 
       card.classList.add("is-flipped");
       chosenCard = card;
       lockOthers(card);
-      setStatus("Fortune revealed. Reset the deck to draw again.");
+      setStatus("Fortune revealed. Press reset to draw again.");
     }
 
-    // Click + keyboard support
     cards.forEach(card => {
       card.addEventListener("click", () => reveal(card));
       card.addEventListener("keydown", (e) => {
@@ -640,8 +676,7 @@
 
     resetBtn.addEventListener("click", resetDeck);
 
-    // initial helper message
-    setStatus("Click one card to receive a fortune.");
+    setStatus("Click on a card to receive a fortune.");
   </script>
 </body>
 </html>
