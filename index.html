@@ -130,13 +130,19 @@
       box-shadow: 0 18px 50px rgba(0,0,0,.35);
     }
 
-    /* 4 columns. Middle row uses cols 2 and 3 (centered). */
+    /* 4 columns x 3 rows, with explicit placement:
+       Row 1: 4 cards (cols 1-4)
+       Row 2: empty, full, full, empty (cols 2-3)
+       Row 3: 4 cards (cols 1-4)
+    */
     .grid{
       display:grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-rows: repeat(3, auto);
       gap: 16px;
       justify-items: center;
       align-items: start;
+      grid-auto-flow: row;
     }
 
     .slot{
@@ -145,9 +151,19 @@
       perspective: 1200px;
     }
 
-    /* Place middle row cards in center columns */
-    .mid-left{ grid-column: 2; }
-    .mid-right{ grid-column: 3; }
+    /* Explicit row/col positions */
+    .r1c1{ grid-row: 1; grid-column: 1; }
+    .r1c2{ grid-row: 1; grid-column: 2; }
+    .r1c3{ grid-row: 1; grid-column: 3; }
+    .r1c4{ grid-row: 1; grid-column: 4; }
+
+    .r2c2{ grid-row: 2; grid-column: 2; }
+    .r2c3{ grid-row: 2; grid-column: 3; }
+
+    .r3c1{ grid-row: 3; grid-column: 1; }
+    .r3c2{ grid-row: 3; grid-column: 2; }
+    .r3c3{ grid-row: 3; grid-column: 3; }
+    .r3c4{ grid-row: 3; grid-column: 4; }
 
     /* Card */
     .card{
@@ -320,9 +336,17 @@
     }
 
     @media (max-width: 720px){
-      /* On small screens: 2 columns, maintain the 10-card count with nice spacing */
-      .grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .mid-left, .mid-right{ grid-column: auto; }
+      /* On small screens: 2 columns, flow naturally */
+      .grid{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: auto;
+      }
+      .r1c1,.r1c2,.r1c3,.r1c4,
+      .r2c2,.r2c3,
+      .r3c1,.r3c2,.r3c3,.r3c4{
+        grid-row: auto;
+        grid-column: auto;
+      }
       .slot{ width: min(170px, 42vw); }
     }
   </style>
@@ -346,8 +370,8 @@
 
     <div class="board" aria-label="Tarot fortune card grid">
       <div class="grid" id="cardGrid">
-        <!-- Top row (4) -->
-        <div class="slot">
+        <!-- Row 1 (4) -->
+        <div class="slot r1c1">
           <div class="card" tabindex="0" role="button" aria-label="Card 1" data-card="1">
             <div class="face front">
               <div class="ornament"></div>
@@ -368,7 +392,7 @@
           </div>
         </div>
 
-        <div class="slot">
+        <div class="slot r1c2">
           <div class="card" tabindex="0" role="button" aria-label="Card 2" data-card="2">
             <div class="face front">
               <div class="ornament"></div>
@@ -389,7 +413,7 @@
           </div>
         </div>
 
-        <div class="slot">
+        <div class="slot r1c3">
           <div class="card" tabindex="0" role="button" aria-label="Card 3" data-card="3">
             <div class="face front">
               <div class="ornament"></div>
@@ -410,7 +434,7 @@
           </div>
         </div>
 
-        <div class="slot">
+        <div class="slot r1c4">
           <div class="card" tabindex="0" role="button" aria-label="Card 4" data-card="4">
             <div class="face front">
               <div class="ornament"></div>
@@ -431,8 +455,8 @@
           </div>
         </div>
 
-        <!-- Middle row (2 centered) -->
-        <div class="slot mid-left">
+        <!-- Row 2 (empty, full, full, empty) -->
+        <div class="slot r2c2">
           <div class="card" tabindex="0" role="button" aria-label="Card 5" data-card="5">
             <div class="face front">
               <div class="ornament"></div>
@@ -453,7 +477,7 @@
           </div>
         </div>
 
-        <div class="slot mid-right">
+        <div class="slot r2c3">
           <div class="card" tabindex="0" role="button" aria-label="Card 6" data-card="6">
             <div class="face front">
               <div class="ornament"></div>
@@ -474,8 +498,8 @@
           </div>
         </div>
 
-        <!-- Bottom row (4) -->
-        <div class="slot">
+        <!-- Row 3 (4) -->
+        <div class="slot r3c1">
           <div class="card" tabindex="0" role="button" aria-label="Card 7" data-card="7">
             <div class="face front">
               <div class="ornament"></div>
@@ -496,7 +520,7 @@
           </div>
         </div>
 
-        <div class="slot">
+        <div class="slot r3c2">
           <div class="card" tabindex="0" role="button" aria-label="Card 8" data-card="8">
             <div class="face front">
               <div class="ornament"></div>
@@ -517,7 +541,7 @@
           </div>
         </div>
 
-        <div class="slot">
+        <div class="slot r3c3">
           <div class="card" tabindex="0" role="button" aria-label="Card 9" data-card="9">
             <div class="face front">
               <div class="ornament"></div>
@@ -538,7 +562,7 @@
           </div>
         </div>
 
-        <div class="slot">
+        <div class="slot r3c4">
           <div class="card" tabindex="0" role="button" aria-label="Card 10" data-card="10">
             <div class="face front">
               <div class="ornament"></div>
