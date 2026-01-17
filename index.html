@@ -1,206 +1,644 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>4EK Tarot Fortune</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>4EK Tarot Fortune</title>
+  <meta name="description" content="Pick a card to receive your 4EK fortune." />
 
-<style>
-:root{
-  --bg:#070707;
-  --gold:#C8A64B;
-  --gold2:#F9CA3B;
-  --text:#F3F3F3;
-  --muted:rgba(243,243,243,.78);
-  --line:rgba(200,166,75,.35);
-  --cardW:170px;
-  --cardH:260px;
-  --radius:18px;
-}
+  <style>
+    :root{
+      /* UCF-ish palette */
+      --bg: #070707;
+      --panel: rgba(16,16,16,.78);
+      --gold: #C8A64B;
+      --gold2:#F9CA3B;
+      --ink: #0B0B0B;
+      --text: #F3F3F3;
+      --muted: rgba(243,243,243,.78);
+      --line: rgba(200,166,75,.35);
 
-*{box-sizing:border-box}
+      /* sizing */
+      --cardW: 170px;
+      --cardH: 260px;
+      --radius: 18px;
+    }
 
-body{
-  margin:0;
-  min-height:100vh;
-  background:var(--bg);
-  color:var(--text);
-  font-family:ui-serif,Georgia,"Times New Roman",serif;
-}
+    *{ box-sizing: border-box; }
 
-.wrap{max-width:980px;margin:0 auto;padding:28px 16px 40px}
+    body{
+      margin:0;
+      min-height:100vh;
+      color: var(--text);
+      background:
+        radial-gradient(1200px 600px at 50% 0%, rgba(200,166,75,.12), transparent 60%),
+        radial-gradient(800px 500px at 15% 70%, rgba(249,202,59,.08), transparent 55%),
+        radial-gradient(900px 500px at 85% 80%, rgba(200,166,75,.06), transparent 55%),
+        var(--bg);
+      font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+      letter-spacing: .2px;
+    }
 
-.header{
-  border:1px solid var(--line);
-  border-radius:22px;
-  padding:18px;
-  text-align:center;
-}
+    .wrap{
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 28px 16px 40px;
+    }
 
-.subtitle{
-  max-width:54ch;
-  margin:8px auto;
-  font-family:system-ui;
-  font-size:14px;
-  color:var(--muted);
-}
+    .header{
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(18,18,18,.85), rgba(10,10,10,.65));
+      border-radius: 22px;
+      padding: 18px 18px 14px;
+      box-shadow: 0 18px 40px rgba(0,0,0,.35);
+      position: relative;
+      overflow: hidden;
+    }
 
-.btn{
-  margin-top:12px;
-  border:1px solid var(--gold);
-  background:#000;
-  color:var(--text);
-  padding:10px 16px;
-  border-radius:999px;
-  cursor:pointer;
-}
+    .header:before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background:
+        radial-gradient(500px 280px at 12% 0%, rgba(200,166,75,.14), transparent 60%),
+        radial-gradient(520px 260px at 88% 20%, rgba(249,202,59,.10), transparent 58%);
+      pointer-events:none;
+    }
 
-.status{
-  margin-top:10px;
-  font-size:13px;
-  min-height:18px;
-}
+    .title{
+      position:relative;
+      margin: 0;
+      font-size: clamp(22px, 3.2vw, 34px);
+      font-weight: 800;
+      text-align: center;
+      letter-spacing: .6px;
+    }
 
-.board{
-  margin-top:22px;
-  border:1px solid var(--line);
-  border-radius:24px;
-  padding:20px;
-}
+    .subtitle{
+      position:relative;
+      margin: 8px auto 0;
+      max-width: 54ch;
+      text-align:center;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.35;
+      color: var(--muted);
+    }
 
-/* 🔒 HARD-LOCKED 4–2–4 GRID */
-.grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:16px;
-  justify-items:center;
-}
+    .controls{
+      position:relative;
+      margin-top: 14px;
+      display:flex;
+      justify-content:center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
 
-/* Explicit placement */
-.t1{grid-row:1;grid-column:1}
-.t2{grid-row:1;grid-column:2}
-.t3{grid-row:1;grid-column:3}
-.t4{grid-row:1;grid-column:4}
+    .btn{
+      appearance:none;
+      border: 1px solid rgba(200,166,75,.55);
+      background: rgba(8,8,8,.55);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor:pointer;
+      transition: transform .08s ease, background .2s ease, border-color .2s ease;
+      user-select:none;
+    }
+    .btn:hover{ border-color: rgba(249,202,59,.75); background: rgba(14,14,14,.75); }
+    .btn:active{ transform: translateY(1px); }
 
-.m5{grid-row:2;grid-column:2}
-.m6{grid-row:2;grid-column:3}
+    .status{
+      position:relative;
+      margin-top: 10px;
+      text-align:center;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-size: 13px;
+      color: rgba(243,243,243,.84);
+      min-height: 20px;
+    }
 
-.b7{grid-row:3;grid-column:1}
-.b8{grid-row:3;grid-column:2}
-.b9{grid-row:3;grid-column:3}
-.b10{grid-row:3;grid-column:4}
+    .board{
+      margin-top: 22px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: rgba(10,10,10,.55);
+      padding: 20px 10px 24px;
+      box-shadow: 0 18px 50px rgba(0,0,0,.35);
+    }
 
-/* Mobile: natural flow */
-@media(max-width:720px){
-  .grid{grid-template-columns:repeat(2,1fr)}
-  .t1,.t2,.t3,.t4,.m5,.m6,.b7,.b8,.b9,.b10{
-    grid-row:auto;
-    grid-column:auto;
-  }
-}
+    /* ✅ HARD-LOCKED 4–2–4 GRID */
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      justify-items: center;
+      align-items: start;
+    }
 
-.slot{width:var(--cardW);height:var(--cardH);perspective:1200px}
+    .slot{
+      width: var(--cardW);
+      height: var(--cardH);
+      perspective: 1200px;
+    }
 
-.card{
-  width:100%;
-  height:100%;
-  position:relative;
-  transform-style:preserve-3d;
-  transition:transform .7s;
-  cursor:pointer;
-}
+    /* Explicit placement: Row 1 */
+    .t1{ grid-row:1; grid-column:1; }
+    .t2{ grid-row:1; grid-column:2; }
+    .t3{ grid-row:1; grid-column:3; }
+    .t4{ grid-row:1; grid-column:4; }
 
-.card.is-flipped{transform:rotateY(180deg)}
-.card.is-locked{opacity:.6;cursor:not-allowed}
+    /* Explicit placement: Row 2 (centered) */
+    .m5{ grid-row:2; grid-column:2; }
+    .m6{ grid-row:2; grid-column:3; }
 
-.face{
-  position:absolute;
-  inset:0;
-  border-radius:var(--radius);
-  backface-visibility:hidden;
-  border:1px solid var(--gold);
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  padding:12px;
-}
+    /* Explicit placement: Row 3 */
+    .b7{  grid-row:3; grid-column:1; }
+    .b8{  grid-row:3; grid-column:2; }
+    .b9{  grid-row:3; grid-column:3; }
+    .b10{ grid-row:3; grid-column:4; }
 
-.back{transform:rotateY(180deg);background:#111}
-.front{background:#000}
+    /* Card */
+    .card{
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform .75s cubic-bezier(.2,.8,.2,1);
+      cursor: pointer;
+      user-select:none;
+    }
 
-.topbar{display:flex;justify-content:space-between;font-size:11px}
-.cardname{text-align:center;font-weight:800}
-.prompt{text-align:center;font-size:12px;color:var(--muted)}
-.fortune{text-align:center;font-family:system-ui}
-.bottom{display:flex;justify-content:space-between;font-size:10px}
-.stamp{border:1px solid var(--gold);padding:4px 6px;border-radius:8px}
-</style>
+    .card.is-flipped{ transform: rotateY(180deg); }
+    .card.is-locked{ cursor: not-allowed; opacity: .72; }
+
+    .face{
+      position:absolute;
+      inset:0;
+      border-radius: var(--radius);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      overflow:hidden;
+      display:flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 1px solid rgba(200,166,75,.45);
+      box-shadow: 0 14px 40px rgba(0,0,0,.45);
+    }
+
+    .front{
+      background:
+        radial-gradient(300px 240px at 30% 20%, rgba(249,202,59,.16), transparent 55%),
+        radial-gradient(320px 260px at 70% 80%, rgba(200,166,75,.10), transparent 58%),
+        linear-gradient(180deg, rgba(14,14,14,.92), rgba(6,6,6,.92));
+    }
+
+    .back{
+      transform: rotateY(180deg);
+      background:
+        radial-gradient(240px 200px at 50% 15%, rgba(249,202,59,.18), transparent 62%),
+        linear-gradient(180deg, rgba(200,166,75,.22), rgba(10,10,10,.90));
+      border-color: rgba(249,202,59,.65);
+    }
+
+    .ornament{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      opacity:.9;
+      background:
+        repeating-linear-gradient(135deg, transparent 0 10px, rgba(200,166,75,.04) 10px 11px),
+        radial-gradient(110px 110px at 50% 34%, rgba(200,166,75,.18), transparent 60%);
+      mask-image: radial-gradient(circle at 50% 50%, black 55%, transparent 85%);
+    }
+
+    .topbar{
+      padding: 12px 12px 0;
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 8px;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      letter-spacing:.5px;
+      text-transform: uppercase;
+      font-size: 11px;
+      color: rgba(243,243,243,.78);
+    }
+
+    .sigil{
+      width: 34px; height: 34px;
+      border-radius: 999px;
+      border: 1px solid rgba(249,202,59,.70);
+      background:
+        radial-gradient(circle at 30% 30%, rgba(249,202,59,.25), transparent 55%),
+        rgba(0,0,0,.35);
+      display:grid;
+      place-items:center;
+      font-weight: 900;
+      color: rgba(249,202,59,.95);
+      font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+    }
+
+    .cardname{
+      padding: 8px 14px 0;
+      font-size: 14px;
+      font-weight: 800;
+      text-align:center;
+      letter-spacing:.6px;
+    }
+
+    .divider{
+      margin: 10px auto 0;
+      width: 72%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(249,202,59,.65), transparent);
+      opacity:.9;
+    }
+
+    .prompt{
+      padding: 12px 16px 0;
+      text-align:center;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-size: 12px;
+      color: rgba(243,243,243,.72);
+      line-height: 1.35;
+    }
+
+    .bottom{
+      padding: 0 12px 12px;
+      display:flex;
+      justify-content: space-between;
+      align-items:flex-end;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-size: 11px;
+      color: rgba(243,243,243,.65);
+      letter-spacing: .3px;
+    }
+
+    .stamp{
+      display:inline-block;
+      padding: 6px 8px;
+      border-radius: 10px;
+      border: 1px solid rgba(200,166,75,.45);
+      background: rgba(0,0,0,.35);
+      color: rgba(249,202,59,.92);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .7px;
+      font-size: 10px;
+    }
+
+    /* Fortune text */
+    .fortune{
+      padding: 14px 16px 0;
+      text-align:center;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.35;
+      color: rgba(243,243,243,.92);
+    }
+
+    .fortune strong{
+      color: rgba(249,202,59,.95);
+      letter-spacing:.4px;
+      text-transform: uppercase;
+      font-size: 11px;
+      display:block;
+      margin-bottom: 8px;
+    }
+
+    /* Accessibility focus */
+    .card:focus-visible{
+      outline: 2px solid rgba(249,202,59,.9);
+      outline-offset: 4px;
+      border-radius: var(--radius);
+    }
+
+    /* Responsive */
+    @media (max-width: 860px){
+      :root{ --cardW: 155px; --cardH: 245px; }
+    }
+
+    @media (max-width: 720px){
+      /* On small screens: 2 columns, flow naturally */
+      .grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .t1,.t2,.t3,.t4,.m5,.m6,.b7,.b8,.b9,.b10{
+        grid-row:auto;
+        grid-column:auto;
+      }
+      .slot{ width: min(170px, 42vw); }
+    }
+  </style>
 </head>
 
 <body>
-<div class="wrap">
-  <div class="header">
-    <h1>4EK Tarot Fortune</h1>
-    <p class="subtitle">Click one card to reveal your semester fortune.</p>
-    <button class="btn" id="resetBtn">Reset deck</button>
-    <div class="status" id="statusText"></div>
-  </div>
+  <div class="wrap">
+    <div class="header">
+      <h1 class="title">4EK Tarot Fortune</h1>
+      <p class="subtitle">
+        Welcome back, Knights. Click one card to reveal your semester fortune.
+        After you choose, the deck locks — hit reset to draw again.
+      </p>
 
-  <div class="board">
-    <div class="grid" id="cardGrid">
+      <div class="controls">
+        <button class="btn" id="resetBtn" type="button">Reset deck</button>
+      </div>
 
-      <div class="slot t1"><div class="card" data-card="1"><div class="face front"><div class="cardname">The Golden Knight</div><div class="prompt">Click to reveal</div></div><div class="face back"><div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div></div></div></div>
-      <div class="slot t2"><div class="card" data-card="2"><div class="face front"><div class="cardname">The Griffin’s Trace</div><div class="prompt">Click to reveal</div></div><div class="face back"><div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div></div></div></div>
-      <div class="slot t3"><div class="card" data-card="3"><div class="face front"><div class="cardname">The RSVP Omen</div><div class="prompt">Click to reveal</div></div><div class="face back"><div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div></div></div></div>
-      <div class="slot t4"><div class="card" data-card="4"><div class="face front"><div class="cardname">The Side Character</div><div class="prompt">Click to reveal</div></div><div class="face back"><div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div></div></div></div>
+      <div class="status" id="statusText" aria-live="polite"></div>
+    </div>
 
-      <div class="slot m5"><div class="card" data-card="5"><div class="face front"><div class="cardname">Glad I Came</div><div class="prompt">Click to reveal</div></div><div class="face back"><div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div></div></div></div>
-      <div class="slot m6"><div class="card" data-card="6"><div class="face front"><div class="cardname">30-Hour Spell</div><div class="prompt">Click to reveal</div></div><div class="face back"><div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div></div></div></div>
+    <div class="board" aria-label="Tarot fortune card grid">
+      <div class="grid" id="cardGrid">
 
-      <div class="slot b7"><div class="card" data-card="7"><div class="face front"><div class="cardname">Study Social</div><div class="prompt">Click to reveal</div></div><div class="face back"><div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div></div></div></div>
-      <div class="slot b8"><div class="card" data-card="8"><div class="face front"><div class="cardname">Free-Food Aura</div><div class="prompt">Click to reveal</div></div><div class="face back"><div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div></div></div></div>
-      <div class="slot b9"><div class="card" data-card="9"><div class="face front"><div class="cardname">You Had To Be There</div><div class="prompt">Click to reveal</div></div><div class="face back"><div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div></div></div></div>
-      <div class="slot b10"><div class="card" data-card="10"><div class="face front"><div class="cardname">Recruitment MVP</div><div class="prompt">Click to reveal</div></div><div class="face back"><div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div></div></div></div>
+        <!-- Row 1 (4) -->
+        <div class="slot t1">
+          <div class="card" tabindex="0" role="button" aria-label="Card 1" data-card="1">
+            <div class="face front">
+              <div class="ornament"></div>
+              <div class="topbar"><span>arcana</span><span class="sigil">Ⅰ</span></div>
+              <div>
+                <div class="cardname">The Golden Knight</div>
+                <div class="divider"></div>
+                <div class="prompt">Click to reveal your fortune.</div>
+              </div>
+              <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
+            </div>
+            <div class="face back">
+              <div class="topbar"><span>revealed</span><span class="sigil">Ⅰ</span></div>
+              <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
+              <div class="bottom"><span class="stamp">fixed</span><span>card 1</span></div>
+            </div>
+          </div>
+        </div>
 
+        <div class="slot t2">
+          <div class="card" tabindex="0" role="button" aria-label="Card 2" data-card="2">
+            <div class="face front">
+              <div class="ornament"></div>
+              <div class="topbar"><span>arcana</span><span class="sigil">Ⅱ</span></div>
+              <div>
+                <div class="cardname">The Griffin’s Trace</div>
+                <div class="divider"></div>
+                <div class="prompt">Click to reveal your fortune.</div>
+              </div>
+              <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
+            </div>
+            <div class="face back">
+              <div class="topbar"><span>revealed</span><span class="sigil">Ⅱ</span></div>
+              <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
+              <div class="bottom"><span class="stamp">fixed</span><span>card 2</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="slot t3">
+          <div class="card" tabindex="0" role="button" aria-label="Card 3" data-card="3">
+            <div class="face front">
+              <div class="ornament"></div>
+              <div class="topbar"><span>arcana</span><span class="sigil">Ⅲ</span></div>
+              <div>
+                <div class="cardname">The RSVP Omen</div>
+                <div class="divider"></div>
+                <div class="prompt">Click to reveal your fortune.</div>
+              </div>
+              <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
+            </div>
+            <div class="face back">
+              <div class="topbar"><span>revealed</span><span class="sigil">Ⅲ</span></div>
+              <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
+              <div class="bottom"><span class="stamp">fixed</span><span>card 3</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="slot t4">
+          <div class="card" tabindex="0" role="button" aria-label="Card 4" data-card="4">
+            <div class="face front">
+              <div class="ornament"></div>
+              <div class="topbar"><span>arcana</span><span class="sigil">Ⅳ</span></div>
+              <div>
+                <div class="cardname">The Side Character</div>
+                <div class="divider"></div>
+                <div class="prompt">Click to reveal your fortune.</div>
+              </div>
+              <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
+            </div>
+            <div class="face back">
+              <div class="topbar"><span>revealed</span><span class="sigil">Ⅳ</span></div>
+              <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
+              <div class="bottom"><span class="stamp">fixed</span><span>card 4</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 2 (2 centered) -->
+        <div class="slot m5">
+          <div class="card" tabindex="0" role="button" aria-label="Card 5" data-card="5">
+            <div class="face front">
+              <div class="ornament"></div>
+              <div class="topbar"><span>arcana</span><span class="sigil">Ⅴ</span></div>
+              <div>
+                <div class="cardname">The “Glad I Came”</div>
+                <div class="divider"></div>
+                <div class="prompt">Click to reveal your fortune.</div>
+              </div>
+              <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
+            </div>
+            <div class="face back">
+              <div class="topbar"><span>revealed</span><span class="sigil">Ⅴ</span></div>
+              <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
+              <div class="bottom"><span class="stamp">fixed</span><span>card 5</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="slot m6">
+          <div class="card" tabindex="0" role="button" aria-label="Card 6" data-card="6">
+            <div class="face front">
+              <div class="ornament"></div>
+              <div class="topbar"><span>arcana</span><span class="sigil">Ⅵ</span></div>
+              <div>
+                <div class="cardname">The 30-Hour Spell</div>
+                <div class="divider"></div>
+                <div class="prompt">Click to reveal your fortune.</div>
+              </div>
+              <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
+            </div>
+            <div class="face back">
+              <div class="topbar"><span>revealed</span><span class="sigil">Ⅵ</span></div>
+              <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
+              <div class="bottom"><span class="stamp">fixed</span><span>card 6</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 3 (4) -->
+        <div class="slot b7">
+          <div class="card" tabindex="0" role="button" aria-label="Card 7" data-card="7">
+            <div class="face front">
+              <div class="ornament"></div>
+              <div class="topbar"><span>arcana</span><span class="sigil">Ⅶ</span></div>
+              <div>
+                <div class="cardname">The Study Social</div>
+                <div class="divider"></div>
+                <div class="prompt">Click to reveal your fortune.</div>
+              </div>
+              <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
+            </div>
+            <div class="face back">
+              <div class="topbar"><span>revealed</span><span class="sigil">Ⅶ</span></div>
+              <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
+              <div class="bottom"><span class="stamp">fixed</span><span>card 7</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="slot b8">
+          <div class="card" tabindex="0" role="button" aria-label="Card 8" data-card="8">
+            <div class="face front">
+              <div class="ornament"></div>
+              <div class="topbar"><span>arcana</span><span class="sigil">Ⅷ</span></div>
+              <div>
+                <div class="cardname">The Free-Food Aura</div>
+                <div class="divider"></div>
+                <div class="prompt">Click to reveal your fortune.</div>
+              </div>
+              <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
+            </div>
+            <div class="face back">
+              <div class="topbar"><span>revealed</span><span class="sigil">Ⅷ</span></div>
+              <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
+              <div class="bottom"><span class="stamp">fixed</span><span>card 8</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="slot b9">
+          <div class="card" tabindex="0" role="button" aria-label="Card 9" data-card="9">
+            <div class="face front">
+              <div class="ornament"></div>
+              <div class="topbar"><span>arcana</span><span class="sigil">Ⅸ</span></div>
+              <div>
+                <div class="cardname">The “You Had To Be There”</div>
+                <div class="divider"></div>
+                <div class="prompt">Click to reveal your fortune.</div>
+              </div>
+              <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
+            </div>
+            <div class="face back">
+              <div class="topbar"><span>revealed</span><span class="sigil">Ⅸ</span></div>
+              <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
+              <div class="bottom"><span class="stamp">fixed</span><span>card 9</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="slot b10">
+          <div class="card" tabindex="0" role="button" aria-label="Card 10" data-card="10">
+            <div class="face front">
+              <div class="ornament"></div>
+              <div class="topbar"><span>arcana</span><span class="sigil">Ⅹ</span></div>
+              <div>
+                <div class="cardname">The Recruitment MVP</div>
+                <div class="divider"></div>
+                <div class="prompt">Click to reveal your fortune.</div>
+              </div>
+              <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
+            </div>
+            <div class="face back">
+              <div class="topbar"><span>revealed</span><span class="sigil">Ⅹ</span></div>
+              <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
+              <div class="bottom"><span class="stamp">fixed</span><span>card 10</span></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
-</div>
 
-<script>
-const fortunes={
-  1:"You will meet a new friend in the Philanthropy Cab.",
-  2:"You will find Knightro.",
-  3:"You’ll stay longer than planned.",
-  4:"A side character becomes important.",
-  5:"You’ll have a glad-I-came moment.",
-  6:"You’ll finish your hours early.",
-  7:"You’ll dominate study socials.",
-  8:"You’ll eat a lot of free food.",
-  9:"You’ll make a legendary memory.",
-  10:"You’ll be recruitment MVP."
-};
+  <script>
+    // Fixed fortunes per card (1..10)
+    const fortunes = {
+      1: "You will meet a new friend in the Philanthropy Cab (golf cart).",
+      2: "You will find Knightro (Day of Giving).",
+      3: "You will show up to a 4EK event “just for a bit” and stay the whole time.",
+      4: "You will unlock a new side character through 4EK and start seeing them everywhere around campus.",
+      5: "You will have at least one “I’m really glad I came” moment this semester.",
+      6: "You will lock in this semester and complete your 30 hours early.",
+      7: "You will attend study socials and become an academic weapon this semester.",
+      8: "You will eat a lot of free food this semester through 4EK events.",
+      9: "You will make a 4EK memory that only makes sense if you were there.",
+      10:"You will be the MVP of recruitment/tabling this semester."
+    };
 
-const cards=[...document.querySelectorAll(".card")];
-const status=document.getElementById("statusText");
-let chosen=null;
+    const statusText = document.getElementById("statusText");
+    const resetBtn = document.getElementById("resetBtn");
+    const cards = Array.from(document.querySelectorAll(".card"));
 
-cards.forEach(card=>{
-  card.onclick=()=>{
-    if(chosen && chosen!==card) return;
-    const t=card.querySelector(".fortune-text");
-    t.textContent=fortunes[card.dataset.card];
-    card.classList.add("is-flipped");
-    chosen=card;
-    cards.forEach(c=>c!==card&&c.classList.add("is-locked"));
-    status.textContent="Fortune revealed. Reset to draw again.";
-  };
-});
+    let chosenCard = null; // lock deck after first pick
 
-document.getElementById("resetBtn").onclick=()=>{
-  cards.forEach(c=>c.classList.remove("is-flipped","is-locked"));
-  chosen=null;
-  status.textContent="";
-};
-</script>
+    function setStatus(msg){
+      statusText.textContent = msg || "";
+    }
+
+    function lockOthers(exceptCard){
+      cards.forEach(c => {
+        if (c !== exceptCard){
+          c.classList.add("is-locked");
+          c.setAttribute("aria-disabled", "true");
+        }
+      });
+    }
+
+    function unlockAll(){
+      cards.forEach(c => {
+        c.classList.remove("is-locked");
+        c.removeAttribute("aria-disabled");
+      });
+    }
+
+    function resetDeck(){
+      chosenCard = null;
+      cards.forEach(c => c.classList.remove("is-flipped"));
+      unlockAll();
+      setStatus("");
+    }
+
+    function reveal(card){
+      if (card.classList.contains("is-locked")) return;
+      if (chosenCard && chosenCard !== card) return; // hard lock
+
+      const n = Number(card.dataset.card);
+      const text = fortunes[n] || "Your fortune awaits.";
+
+      const targets = card.querySelectorAll(".fortune-text");
+      targets.forEach(t => t.textContent = text);
+
+      card.classList.add("is-flipped");
+      chosenCard = card;
+      lockOthers(card);
+      setStatus("Fortune revealed. Reset the deck to draw again.");
+    }
+
+    // Click + keyboard support
+    cards.forEach(card => {
+      card.addEventListener("click", () => reveal(card));
+      card.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " "){
+          e.preventDefault();
+          reveal(card);
+        }
+      });
+    });
+
+    resetBtn.addEventListener("click", resetDeck);
+
+    // initial helper message
+    setStatus("Click one card to receive a fortune.");
+  </script>
 </body>
 </html>
