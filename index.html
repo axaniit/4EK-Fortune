@@ -385,6 +385,28 @@
       .t1,.t2,.t3,.t4,.m5,.m6,.b7,.b8,.b9,.b10{ grid-row:auto; grid-column:auto; }
       .slot{ width: min(170px, 42vw); }
     }
+    /* ✅ FORCE card size (fix “squished/short” cards) */
+:root{
+  --cardW: 170px !important;
+  --cardH: 260px !important;
+}
+
+.slot{
+  width: var(--cardW) !important;
+  height: var(--cardH) !important;
+}
+
+.card{ height: 100% !important; }
+.face{ height: 100% !important; }
+
+/* keep your existing responsive sizing, but force it too */
+@media (max-width: 860px){
+  :root{
+    --cardW: 155px !important;
+    --cardH: 245px !important;
+  }
+}
+
   </style>
 </head>
 
