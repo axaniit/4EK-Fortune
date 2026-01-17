@@ -130,56 +130,25 @@
       box-shadow: 0 18px 50px rgba(0,0,0,.35);
     }
 
-    <!-- ✅ ONLY the parts you need to change: CSS grid + the 10 slot wrappers -->
-<style>
-  /* 4 columns total.
-     Row 1: 4 cards
-     Row 2: 2 cards centered (cols 2 & 3)
-     Row 3: 4 cards
-  */
-  .grid{
-    display:grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 16px;
-    justify-items: center;
-    align-items: start;
-    grid-auto-flow: row;
-  }
+    /* ✅ 4–2–4 layout */
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      justify-items: center;
+      align-items: start;
+      grid-auto-flow: row;
+    }
 
-  .slot{
-    width: var(--cardW);
-    height: var(--cardH);
-    perspective: 1200px;
-  }
+    .slot{
+      width: var(--cardW);
+      height: var(--cardH);
+      perspective: 1200px;
+    }
 
-  /* Center the middle row explicitly and FORCE it to be row 2 */
-  .mid-left  { grid-column: 2; grid-row: 2; }
-  .mid-right { grid-column: 3; grid-row: 2; }
-
-  /* On small screens: just flow normally in 2 columns */
-  @media (max-width: 720px){
-    .grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .mid-left, .mid-right{ grid-column: auto; grid-row: auto; }
-    .slot{ width: min(170px, 42vw); }
-  }
-</style>
-<div class="grid" id="cardGrid">
-  <!-- Row 1 (4) -->
-  <div class="slot">...card 1...</div>
-  <div class="slot">...card 2...</div>
-  <div class="slot">...card 3...</div>
-  <div class="slot">...card 4...</div>
-
-  <!-- Row 2 (2 centered) -->
-  <div class="slot mid-left">...card 5...</div>
-  <div class="slot mid-right">...card 6...</div>
-
-  <!-- Row 3 (4) -->
-  <div class="slot">...card 7...</div>
-  <div class="slot">...card 8...</div>
-  <div class="slot">...card 9...</div>
-  <div class="slot">...card 10...</div>
-</div>
+    /* Center the middle row explicitly and FORCE it to be row 2 */
+    .mid-left  { grid-column: 2; grid-row: 2; }
+    .mid-right { grid-column: 3; grid-row: 2; }
 
     /* Card */
     .card{
@@ -330,15 +299,6 @@
       margin-bottom: 8px;
     }
 
-    .smallprint{
-      padding: 10px 16px 0;
-      text-align:center;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      font-size: 12px;
-      color: rgba(243,243,243,.70);
-      line-height: 1.35;
-    }
-
     /* Accessibility focus */
     .card:focus-visible{
       outline: 2px solid rgba(249,202,59,.9);
@@ -352,17 +312,8 @@
     }
 
     @media (max-width: 720px){
-      /* On small screens: 2 columns, flow naturally */
-      .grid{
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        grid-template-rows: auto;
-      }
-      .r1c1,.r1c2,.r1c3,.r1c4,
-      .r2c2,.r2c3,
-      .r3c1,.r3c2,.r3c3,.r3c4{
-        grid-row: auto;
-        grid-column: auto;
-      }
+      .grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .mid-left, .mid-right{ grid-column: auto; grid-row: auto; }
       .slot{ width: min(170px, 42vw); }
     }
   </style>
@@ -386,8 +337,8 @@
 
     <div class="board" aria-label="Tarot fortune card grid">
       <div class="grid" id="cardGrid">
-        <!-- Row 1 (4) -->
-        <div class="slot r1c1">
+        <!-- Top row (4) -->
+        <div class="slot">
           <div class="card" tabindex="0" role="button" aria-label="Card 1" data-card="1">
             <div class="face front">
               <div class="ornament"></div>
@@ -407,7 +358,7 @@
           </div>
         </div>
 
-        <div class="slot r1c2">
+        <div class="slot">
           <div class="card" tabindex="0" role="button" aria-label="Card 2" data-card="2">
             <div class="face front">
               <div class="ornament"></div>
@@ -422,13 +373,12 @@
             <div class="face back">
               <div class="topbar"><span>revealed</span><span class="sigil">Ⅱ</span></div>
               <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
-              <div class="smallprint">May your semester be bold, bright, and very 4EK.</div>
               <div class="bottom"><span class="stamp">fixed</span><span>card 2</span></div>
             </div>
           </div>
         </div>
 
-        <div class="slot r1c3">
+        <div class="slot">
           <div class="card" tabindex="0" role="button" aria-label="Card 3" data-card="3">
             <div class="face front">
               <div class="ornament"></div>
@@ -443,13 +393,12 @@
             <div class="face back">
               <div class="topbar"><span>revealed</span><span class="sigil">Ⅲ</span></div>
               <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
-              <div class="smallprint">May your semester be bold, bright, and very 4EK.</div>
               <div class="bottom"><span class="stamp">fixed</span><span>card 3</span></div>
             </div>
           </div>
         </div>
 
-        <div class="slot r1c4">
+        <div class="slot">
           <div class="card" tabindex="0" role="button" aria-label="Card 4" data-card="4">
             <div class="face front">
               <div class="ornament"></div>
@@ -464,14 +413,13 @@
             <div class="face back">
               <div class="topbar"><span>revealed</span><span class="sigil">Ⅳ</span></div>
               <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
-              <div class="smallprint">May your semester be bold, bright, and very 4EK.</div>
               <div class="bottom"><span class="stamp">fixed</span><span>card 4</span></div>
             </div>
           </div>
         </div>
 
-        <!-- Row 2 (empty, full, full, empty) -->
-        <div class="slot r2c2">
+        <!-- Middle row (2 centered) -->
+        <div class="slot mid-left">
           <div class="card" tabindex="0" role="button" aria-label="Card 5" data-card="5">
             <div class="face front">
               <div class="ornament"></div>
@@ -486,13 +434,12 @@
             <div class="face back">
               <div class="topbar"><span>revealed</span><span class="sigil">Ⅴ</span></div>
               <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
-              <div class="smallprint">May your semester be bold, bright, and very 4EK.</div>
               <div class="bottom"><span class="stamp">fixed</span><span>card 5</span></div>
             </div>
           </div>
         </div>
 
-        <div class="slot r2c3">
+        <div class="slot mid-right">
           <div class="card" tabindex="0" role="button" aria-label="Card 6" data-card="6">
             <div class="face front">
               <div class="ornament"></div>
@@ -507,14 +454,13 @@
             <div class="face back">
               <div class="topbar"><span>revealed</span><span class="sigil">Ⅵ</span></div>
               <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
-              <div class="smallprint">May your semester be bold, bright, and very 4EK.</div>
               <div class="bottom"><span class="stamp">fixed</span><span>card 6</span></div>
             </div>
           </div>
         </div>
 
-        <!-- Row 3 (4) -->
-        <div class="slot r3c1">
+        <!-- Bottom row (4) -->
+        <div class="slot">
           <div class="card" tabindex="0" role="button" aria-label="Card 7" data-card="7">
             <div class="face front">
               <div class="ornament"></div>
@@ -529,13 +475,12 @@
             <div class="face back">
               <div class="topbar"><span>revealed</span><span class="sigil">Ⅶ</span></div>
               <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
-              <div class="smallprint">May your semester be bold, bright, and very 4EK.</div>
               <div class="bottom"><span class="stamp">fixed</span><span>card 7</span></div>
             </div>
           </div>
         </div>
 
-        <div class="slot r3c2">
+        <div class="slot">
           <div class="card" tabindex="0" role="button" aria-label="Card 8" data-card="8">
             <div class="face front">
               <div class="ornament"></div>
@@ -550,13 +495,12 @@
             <div class="face back">
               <div class="topbar"><span>revealed</span><span class="sigil">Ⅷ</span></div>
               <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
-              <div class="smallprint">May your semester be bold, bright, and very 4EK.</div>
               <div class="bottom"><span class="stamp">fixed</span><span>card 8</span></div>
             </div>
           </div>
         </div>
 
-        <div class="slot r3c3">
+        <div class="slot">
           <div class="card" tabindex="0" role="button" aria-label="Card 9" data-card="9">
             <div class="face front">
               <div class="ornament"></div>
@@ -571,13 +515,12 @@
             <div class="face back">
               <div class="topbar"><span>revealed</span><span class="sigil">Ⅸ</span></div>
               <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
-              <div class="smallprint">May your semester be bold, bright, and very 4EK.</div>
               <div class="bottom"><span class="stamp">fixed</span><span>card 9</span></div>
             </div>
           </div>
         </div>
 
-        <div class="slot r3c4">
+        <div class="slot">
           <div class="card" tabindex="0" role="button" aria-label="Card 10" data-card="10">
             <div class="face front">
               <div class="ornament"></div>
@@ -592,7 +535,6 @@
             <div class="face back">
               <div class="topbar"><span>revealed</span><span class="sigil">Ⅹ</span></div>
               <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
-              <div class="smallprint">May your semester be bold, bright, and very 4EK.</div>
               <div class="bottom"><span class="stamp">fixed</span><span>card 10</span></div>
             </div>
           </div>
