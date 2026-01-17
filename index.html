@@ -130,7 +130,7 @@
       box-shadow: 0 18px 50px rgba(0,0,0,.35);
     }
 
-    /* ✅ LOCKED 4–2–4 GRID (keeps your original look) */
+    /* ✅ LOCKED 4–2–4 GRID */
     .grid{
       display:grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -265,6 +265,16 @@
       line-height: 1.35;
     }
 
+    /* ✅ front prompt centered vertically */
+    .prompt.only{
+      padding: 0 16px;
+      flex: 1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+    }
+
     .bottom{
       padding: 0 12px 12px;
       display:flex;
@@ -350,82 +360,96 @@
 
     <div class="board" aria-label="Tarot fortune card grid">
       <div class="grid" id="cardGrid">
+
+        <!-- Helper: per card, set data-title to show on back -->
         <!-- Row 1 (4) -->
         <div class="slot t1">
-          <div class="card" tabindex="0" role="button" aria-label="Card 1" data-card="1">
+          <div class="card" tabindex="0" role="button" aria-label="Card 1" data-card="1" data-title="The Golden Knight">
             <div class="face front">
               <div class="ornament"></div>
               <div class="topbar"><span>arcana</span><span class="sigil">Ⅰ</span></div>
-              <div>
-                <div class="cardname">The Golden Knight</div>
-                <div class="divider"></div>
-                <div class="prompt">Click to reveal your fortune.</div>
-              </div>
+
+              <!-- ✅ front: ONLY prompt centered -->
+              <div class="prompt only">Click to reveal your fortune.</div>
+
               <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
             </div>
+
             <div class="face back">
+              <!-- Keep numbers, keep "revealed" topbar -->
               <div class="topbar"><span>revealed</span><span class="sigil">Ⅰ</span></div>
-              <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
+
+              <!-- ✅ back: "Your fortune" then title + divider + fortune -->
+              <div>
+                <div class="fortune"><strong>Your fortune</strong></div>
+                <div class="cardname back-title"></div>
+                <div class="divider"></div>
+                <div class="fortune" style="padding-top:12px;"><span class="fortune-text"></span></div>
+              </div>
+
               <div class="bottom"><span class="stamp">fixed</span><span>card 1</span></div>
             </div>
           </div>
         </div>
 
         <div class="slot t2">
-          <div class="card" tabindex="0" role="button" aria-label="Card 2" data-card="2">
+          <div class="card" tabindex="0" role="button" aria-label="Card 2" data-card="2" data-title="The Griffin’s Trace">
             <div class="face front">
               <div class="ornament"></div>
               <div class="topbar"><span>arcana</span><span class="sigil">Ⅱ</span></div>
-              <div>
-                <div class="cardname">The Griffin’s Trace</div>
-                <div class="divider"></div>
-                <div class="prompt">Click to reveal your fortune.</div>
-              </div>
+              <div class="prompt only">Click to reveal your fortune.</div>
               <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
             </div>
             <div class="face back">
               <div class="topbar"><span>revealed</span><span class="sigil">Ⅱ</span></div>
-              <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
+              <div>
+                <div class="fortune"><strong>Your fortune</strong></div>
+                <div class="cardname back-title"></div>
+                <div class="divider"></div>
+                <div class="fortune" style="padding-top:12px;"><span class="fortune-text"></span></div>
+              </div>
               <div class="bottom"><span class="stamp">fixed</span><span>card 2</span></div>
             </div>
           </div>
         </div>
 
         <div class="slot t3">
-          <div class="card" tabindex="0" role="button" aria-label="Card 3" data-card="3">
+          <div class="card" tabindex="0" role="button" aria-label="Card 3" data-card="3" data-title="The RSVP Omen">
             <div class="face front">
               <div class="ornament"></div>
               <div class="topbar"><span>arcana</span><span class="sigil">Ⅲ</span></div>
-              <div>
-                <div class="cardname">The RSVP Omen</div>
-                <div class="divider"></div>
-                <div class="prompt">Click to reveal your fortune.</div>
-              </div>
+              <div class="prompt only">Click to reveal your fortune.</div>
               <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
             </div>
             <div class="face back">
               <div class="topbar"><span>revealed</span><span class="sigil">Ⅲ</span></div>
-              <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
+              <div>
+                <div class="fortune"><strong>Your fortune</strong></div>
+                <div class="cardname back-title"></div>
+                <div class="divider"></div>
+                <div class="fortune" style="padding-top:12px;"><span class="fortune-text"></span></div>
+              </div>
               <div class="bottom"><span class="stamp">fixed</span><span>card 3</span></div>
             </div>
           </div>
         </div>
 
         <div class="slot t4">
-          <div class="card" tabindex="0" role="button" aria-label="Card 4" data-card="4">
+          <div class="card" tabindex="0" role="button" aria-label="Card 4" data-card="4" data-title="The Side Character">
             <div class="face front">
               <div class="ornament"></div>
               <div class="topbar"><span>arcana</span><span class="sigil">Ⅳ</span></div>
-              <div>
-                <div class="cardname">The Side Character</div>
-                <div class="divider"></div>
-                <div class="prompt">Click to reveal your fortune.</div>
-              </div>
+              <div class="prompt only">Click to reveal your fortune.</div>
               <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
             </div>
             <div class="face back">
               <div class="topbar"><span>revealed</span><span class="sigil">Ⅳ</span></div>
-              <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
+              <div>
+                <div class="fortune"><strong>Your fortune</strong></div>
+                <div class="cardname back-title"></div>
+                <div class="divider"></div>
+                <div class="fortune" style="padding-top:12px;"><span class="fortune-text"></span></div>
+              </div>
               <div class="bottom"><span class="stamp">fixed</span><span>card 4</span></div>
             </div>
           </div>
@@ -433,40 +457,42 @@
 
         <!-- Row 2 (2 centered) -->
         <div class="slot m5">
-          <div class="card" tabindex="0" role="button" aria-label="Card 5" data-card="5">
+          <div class="card" tabindex="0" role="button" aria-label="Card 5" data-card="5" data-title="The “Glad I Came”">
             <div class="face front">
               <div class="ornament"></div>
               <div class="topbar"><span>arcana</span><span class="sigil">Ⅴ</span></div>
-              <div>
-                <div class="cardname">The “Glad I Came”</div>
-                <div class="divider"></div>
-                <div class="prompt">Click to reveal your fortune.</div>
-              </div>
+              <div class="prompt only">Click to reveal your fortune.</div>
               <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
             </div>
             <div class="face back">
               <div class="topbar"><span>revealed</span><span class="sigil">Ⅴ</span></div>
-              <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
+              <div>
+                <div class="fortune"><strong>Your fortune</strong></div>
+                <div class="cardname back-title"></div>
+                <div class="divider"></div>
+                <div class="fortune" style="padding-top:12px;"><span class="fortune-text"></span></div>
+              </div>
               <div class="bottom"><span class="stamp">fixed</span><span>card 5</span></div>
             </div>
           </div>
         </div>
 
         <div class="slot m6">
-          <div class="card" tabindex="0" role="button" aria-label="Card 6" data-card="6">
+          <div class="card" tabindex="0" role="button" aria-label="Card 6" data-card="6" data-title="The 30-Hour Spell">
             <div class="face front">
               <div class="ornament"></div>
               <div class="topbar"><span>arcana</span><span class="sigil">Ⅵ</span></div>
-              <div>
-                <div class="cardname">The 30-Hour Spell</div>
-                <div class="divider"></div>
-                <div class="prompt">Click to reveal your fortune.</div>
-              </div>
+              <div class="prompt only">Click to reveal your fortune.</div>
               <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
             </div>
             <div class="face back">
               <div class="topbar"><span>revealed</span><span class="sigil">Ⅵ</span></div>
-              <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
+              <div>
+                <div class="fortune"><strong>Your fortune</strong></div>
+                <div class="cardname back-title"></div>
+                <div class="divider"></div>
+                <div class="fortune" style="padding-top:12px;"><span class="fortune-text"></span></div>
+              </div>
               <div class="bottom"><span class="stamp">fixed</span><span>card 6</span></div>
             </div>
           </div>
@@ -474,80 +500,84 @@
 
         <!-- Row 3 (4) -->
         <div class="slot b7">
-          <div class="card" tabindex="0" role="button" aria-label="Card 7" data-card="7">
+          <div class="card" tabindex="0" role="button" aria-label="Card 7" data-card="7" data-title="The Study Social">
             <div class="face front">
               <div class="ornament"></div>
               <div class="topbar"><span>arcana</span><span class="sigil">Ⅶ</span></div>
-              <div>
-                <div class="cardname">The Study Social</div>
-                <div class="divider"></div>
-                <div class="prompt">Click to reveal your fortune.</div>
-              </div>
+              <div class="prompt only">Click to reveal your fortune.</div>
               <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
             </div>
             <div class="face back">
               <div class="topbar"><span>revealed</span><span class="sigil">Ⅶ</span></div>
-              <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
+              <div>
+                <div class="fortune"><strong>Your fortune</strong></div>
+                <div class="cardname back-title"></div>
+                <div class="divider"></div>
+                <div class="fortune" style="padding-top:12px;"><span class="fortune-text"></span></div>
+              </div>
               <div class="bottom"><span class="stamp">fixed</span><span>card 7</span></div>
             </div>
           </div>
         </div>
 
         <div class="slot b8">
-          <div class="card" tabindex="0" role="button" aria-label="Card 8" data-card="8">
+          <div class="card" tabindex="0" role="button" aria-label="Card 8" data-card="8" data-title="The Free-Food Aura">
             <div class="face front">
               <div class="ornament"></div>
               <div class="topbar"><span>arcana</span><span class="sigil">Ⅷ</span></div>
-              <div>
-                <div class="cardname">The Free-Food Aura</div>
-                <div class="divider"></div>
-                <div class="prompt">Click to reveal your fortune.</div>
-              </div>
+              <div class="prompt only">Click to reveal your fortune.</div>
               <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
             </div>
             <div class="face back">
               <div class="topbar"><span>revealed</span><span class="sigil">Ⅷ</span></div>
-              <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
+              <div>
+                <div class="fortune"><strong>Your fortune</strong></div>
+                <div class="cardname back-title"></div>
+                <div class="divider"></div>
+                <div class="fortune" style="padding-top:12px;"><span class="fortune-text"></span></div>
+              </div>
               <div class="bottom"><span class="stamp">fixed</span><span>card 8</span></div>
             </div>
           </div>
         </div>
 
         <div class="slot b9">
-          <div class="card" tabindex="0" role="button" aria-label="Card 9" data-card="9">
+          <div class="card" tabindex="0" role="button" aria-label="Card 9" data-card="9" data-title="The “You Had To Be There”">
             <div class="face front">
               <div class="ornament"></div>
               <div class="topbar"><span>arcana</span><span class="sigil">Ⅸ</span></div>
-              <div>
-                <div class="cardname">The “You Had To Be There”</div>
-                <div class="divider"></div>
-                <div class="prompt">Click to reveal your fortune.</div>
-              </div>
+              <div class="prompt only">Click to reveal your fortune.</div>
               <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
             </div>
             <div class="face back">
               <div class="topbar"><span>revealed</span><span class="sigil">Ⅸ</span></div>
-              <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
+              <div>
+                <div class="fortune"><strong>Your fortune</strong></div>
+                <div class="cardname back-title"></div>
+                <div class="divider"></div>
+                <div class="fortune" style="padding-top:12px;"><span class="fortune-text"></span></div>
+              </div>
               <div class="bottom"><span class="stamp">fixed</span><span>card 9</span></div>
             </div>
           </div>
         </div>
 
         <div class="slot b10">
-          <div class="card" tabindex="0" role="button" aria-label="Card 10" data-card="10">
+          <div class="card" tabindex="0" role="button" aria-label="Card 10" data-card="10" data-title="The Recruitment MVP">
             <div class="face front">
               <div class="ornament"></div>
               <div class="topbar"><span>arcana</span><span class="sigil">Ⅹ</span></div>
-              <div>
-                <div class="cardname">The Recruitment MVP</div>
-                <div class="divider"></div>
-                <div class="prompt">Click to reveal your fortune.</div>
-              </div>
+              <div class="prompt only">Click to reveal your fortune.</div>
               <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
             </div>
             <div class="face back">
               <div class="topbar"><span>revealed</span><span class="sigil">Ⅹ</span></div>
-              <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
+              <div>
+                <div class="fortune"><strong>Your fortune</strong></div>
+                <div class="cardname back-title"></div>
+                <div class="divider"></div>
+                <div class="fortune" style="padding-top:12px;"><span class="fortune-text"></span></div>
+              </div>
               <div class="bottom"><span class="stamp">fixed</span><span>card 10</span></div>
             </div>
           </div>
@@ -612,8 +642,14 @@
       const n = Number(card.dataset.card);
       const text = fortunes[n] || "Your fortune awaits.";
 
+      // set fortune
       const targets = card.querySelectorAll(".fortune-text");
       targets.forEach(t => t.textContent = text);
+
+      // set back title from data-title
+      const title = card.dataset.title || "";
+      const titleTargets = card.querySelectorAll(".back-title");
+      titleTargets.forEach(t => t.textContent = title);
 
       card.classList.add("is-flipped");
       chosenCard = card;
