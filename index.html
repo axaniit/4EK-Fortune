@@ -141,6 +141,7 @@
       width: var(--cardW);
       height: var(--cardH);
       perspective: 1200px;
+      transform-style: preserve-3d; /* Safari help */
     }
 
     .t1{grid-row:1;grid-column:1}
@@ -163,6 +164,7 @@
       transition: transform .75s cubic-bezier(.2,.8,.2,1);
       cursor: pointer;
       user-select:none;
+      will-change: transform;
     }
 
     .card.is-flipped{ transform: rotateY(180deg); }
@@ -180,10 +182,15 @@
       justify-content: space-between;
       border: 1px solid rgba(200,166,75,.45);
       box-shadow: 0 14px 40px rgba(0,0,0,.45);
+
+      /* prevent “front bleed” on Safari */
+      transform-style: preserve-3d;
+      -webkit-transform-style: preserve-3d;
     }
 
     .front{
       position: relative;
+      transform: rotateY(0deg) translateZ(0.5px);
       background:
         radial-gradient(300px 240px at 30% 20%, rgba(249,202,59,.16), transparent 55%),
         radial-gradient(320px 260px at 70% 80%, rgba(200,166,75,.10), transparent 58%),
@@ -191,11 +198,17 @@
     }
 
     .back{
-      transform: rotateY(180deg);
+      transform: rotateY(180deg) translateZ(0.5px);
       background:
         radial-gradient(240px 200px at 50% 15%, rgba(249,202,59,.18), transparent 62%),
         linear-gradient(180deg, rgba(200,166,75,.22), rgba(10,10,10,.90));
       border-color: rgba(249,202,59,.65);
+
+      /* ✅ required for scrolling to work */
+      display:flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 0;
     }
 
     .ornament{
@@ -209,7 +222,7 @@
       mask-image: radial-gradient(circle at 50% 50%, black 55%, transparent 85%);
     }
 
-    /* ✅ NEW: ornate line-art ONLY on the FRONT */
+    /* ornate line-art ONLY on the FRONT */
     .front::before{
       content:"";
       position:absolute;
@@ -233,15 +246,12 @@
         radial-gradient(18px 18px at 82% 18%, rgba(249,202,59,.65), transparent 62%),
         radial-gradient(18px 18px at 18% 82%, rgba(249,202,59,.65), transparent 62%),
         radial-gradient(18px 18px at 82% 82%, rgba(249,202,59,.65), transparent 62%),
-        /* corner curl lines */
         conic-gradient(from 225deg at 18% 18%, rgba(249,202,59,.26), transparent 35%),
         conic-gradient(from 315deg at 82% 18%, rgba(249,202,59,.26), transparent 35%),
         conic-gradient(from 135deg at 18% 82%, rgba(249,202,59,.26), transparent 35%),
         conic-gradient(from 45deg  at 82% 82%, rgba(249,202,59,.26), transparent 35%),
-        /* center filigree ring */
         radial-gradient(70px 70px at 50% 50%, transparent 58%, rgba(249,202,59,.18) 59% 60%, transparent 62%),
         radial-gradient(52px 52px at 50% 50%, transparent 54%, rgba(200,166,75,.16) 55% 56%, transparent 58%),
-        /* delicate micro-lines */
         repeating-linear-gradient(135deg, transparent 0 14px, rgba(249,202,59,.05) 14px 15px);
       mix-blend-mode: screen;
     }
@@ -338,10 +348,10 @@
 
     /* Fortune text */
     .fortune{
-      padding: 14px 16px 0;
+      padding: 12px 16px 0;
       text-align:center;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      font-size: 14px;
+      font-size: 13px;
       line-height: 1.35;
       color: rgba(243,243,243,.92);
     }
@@ -350,15 +360,18 @@
       color: rgba(249,202,59,.95);
       letter-spacing:.4px;
       text-transform: uppercase;
-      font-size: 11px;
+      font-size: 10px;
       display:block;
       margin-bottom: 8px;
     }
 
+    /* scrolling zone */
     .back-body{
       flex: 1 1 auto;
       min-height: 0;
       overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-y;
       padding-bottom: 10px;
     }
     .back-body::-webkit-scrollbar{ width: 8px; }
@@ -385,28 +398,25 @@
       .t1,.t2,.t3,.t4,.m5,.m6,.b7,.b8,.b9,.b10{ grid-row:auto; grid-column:auto; }
       .slot{ width: min(170px, 42vw); }
     }
-    /* ✅ FORCE card size (fix “squished/short” cards) */
-:root{
-  --cardW: 170px !important;
-  --cardH: 260px !important;
-}
 
-.slot{
-  width: var(--cardW) !important;
-  height: var(--cardH) !important;
-}
+    /* ✅ FORCE card size */
+    :root{
+      --cardW: 170px !important;
+      --cardH: 260px !important;
+    }
+    .slot{
+      width: var(--cardW) !important;
+      height: var(--cardH) !important;
+    }
+    .card{ height: 100% !important; }
+    .face{ height: 100% !important; }
 
-.card{ height: 100% !important; }
-.face{ height: 100% !important; }
-
-/* keep your existing responsive sizing, but force it too */
-@media (max-width: 860px){
-  :root{
-    --cardW: 155px !important;
-    --cardH: 245px !important;
-  }
-}
-
+    @media (max-width: 860px){
+      :root{
+        --cardW: 155px !important;
+        --cardH: 245px !important;
+      }
+    }
   </style>
 </head>
 
@@ -444,7 +454,7 @@
                 <div class="fortune"><strong>Your fortune</strong></div>
                 <div class="cardname back-title"></div>
                 <div class="divider"></div>
-                <div class="fortune" style="padding-top:12px;"><span class="fortune-text"></span></div>
+                <div class="fortune" style="padding-top:10px;"><span class="fortune-text"></span></div>
               </div>
               <div class="bottom"><span class="stamp">fixed</span><span>card 1</span></div>
             </div>
@@ -465,7 +475,7 @@
                 <div class="fortune"><strong>Your fortune</strong></div>
                 <div class="cardname back-title"></div>
                 <div class="divider"></div>
-                <div class="fortune" style="padding-top:12px;"><span class="fortune-text"></span></div>
+                <div class="fortune" style="padding-top:10px;"><span class="fortune-text"></span></div>
               </div>
               <div class="bottom"><span class="stamp">fixed</span><span>card 2</span></div>
             </div>
@@ -486,7 +496,7 @@
                 <div class="fortune"><strong>Your fortune</strong></div>
                 <div class="cardname back-title"></div>
                 <div class="divider"></div>
-                <div class="fortune" style="padding-top:12px;"><span class="fortune-text"></span></div>
+                <div class="fortune" style="padding-top:10px;"><span class="fortune-text"></span></div>
               </div>
               <div class="bottom"><span class="stamp">fixed</span><span>card 3</span></div>
             </div>
@@ -507,7 +517,7 @@
                 <div class="fortune"><strong>Your fortune</strong></div>
                 <div class="cardname back-title"></div>
                 <div class="divider"></div>
-                <div class="fortune" style="padding-top:12px;"><span class="fortune-text"></span></div>
+                <div class="fortune" style="padding-top:10px;"><span class="fortune-text"></span></div>
               </div>
               <div class="bottom"><span class="stamp">fixed</span><span>card 4</span></div>
             </div>
@@ -529,7 +539,7 @@
                 <div class="fortune"><strong>Your fortune</strong></div>
                 <div class="cardname back-title"></div>
                 <div class="divider"></div>
-                <div class="fortune" style="padding-top:12px;"><span class="fortune-text"></span></div>
+                <div class="fortune" style="padding-top:10px;"><span class="fortune-text"></span></div>
               </div>
               <div class="bottom"><span class="stamp">fixed</span><span>card 5</span></div>
             </div>
@@ -550,7 +560,7 @@
                 <div class="fortune"><strong>Your fortune</strong></div>
                 <div class="cardname back-title"></div>
                 <div class="divider"></div>
-                <div class="fortune" style="padding-top:12px;"><span class="fortune-text"></span></div>
+                <div class="fortune" style="padding-top:10px;"><span class="fortune-text"></span></div>
               </div>
               <div class="bottom"><span class="stamp">fixed</span><span>card 6</span></div>
             </div>
@@ -572,7 +582,7 @@
                 <div class="fortune"><strong>Your fortune</strong></div>
                 <div class="cardname back-title"></div>
                 <div class="divider"></div>
-                <div class="fortune" style="padding-top:12px;"><span class="fortune-text"></span></div>
+                <div class="fortune" style="padding-top:10px;"><span class="fortune-text"></span></div>
               </div>
               <div class="bottom"><span class="stamp">fixed</span><span>card 7</span></div>
             </div>
@@ -593,7 +603,7 @@
                 <div class="fortune"><strong>Your fortune</strong></div>
                 <div class="cardname back-title"></div>
                 <div class="divider"></div>
-                <div class="fortune" style="padding-top:12px;"><span class="fortune-text"></span></div>
+                <div class="fortune" style="padding-top:10px;"><span class="fortune-text"></span></div>
               </div>
               <div class="bottom"><span class="stamp">fixed</span><span>card 8</span></div>
             </div>
@@ -614,7 +624,7 @@
                 <div class="fortune"><strong>Your fortune</strong></div>
                 <div class="cardname back-title"></div>
                 <div class="divider"></div>
-                <div class="fortune" style="padding-top:12px;"><span class="fortune-text"></span></div>
+                <div class="fortune" style="padding-top:10px;"><span class="fortune-text"></span></div>
               </div>
               <div class="bottom"><span class="stamp">fixed</span><span>card 9</span></div>
             </div>
@@ -635,7 +645,7 @@
                 <div class="fortune"><strong>Your fortune</strong></div>
                 <div class="cardname back-title"></div>
                 <div class="divider"></div>
-                <div class="fortune" style="padding-top:12px;"><span class="fortune-text"></span></div>
+                <div class="fortune" style="padding-top:10px;"><span class="fortune-text"></span></div>
               </div>
               <div class="bottom"><span class="stamp">fixed</span><span>card 10</span></div>
             </div>
