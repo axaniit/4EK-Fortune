@@ -8,6 +8,7 @@
 
   <style>
     :root{
+      /* UCF-ish palette */
       --bg: #070707;
       --panel: rgba(16,16,16,.78);
       --gold: #C8A64B;
@@ -16,6 +17,8 @@
       --text: #F3F3F3;
       --muted: rgba(243,243,243,.78);
       --line: rgba(200,166,75,.35);
+
+      /* sizing */
       --cardW: 170px;
       --cardH: 260px;
       --radius: 18px;
@@ -153,6 +156,7 @@
     .b9{grid-row:3;grid-column:3}
     .b10{grid-row:3;grid-column:4}
 
+    /* Card */
     .card{
       width: 100%;
       height: 100%;
@@ -217,6 +221,7 @@
       text-transform: uppercase;
       font-size: 11px;
       color: rgba(243,243,243,.78);
+      flex: 0 0 auto;
     }
 
     .sigil{
@@ -249,18 +254,9 @@
       opacity:.9;
     }
 
-    .prompt{
-      padding: 12px 16px 0;
-      text-align:center;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      font-size: 12px;
-      color: rgba(243,243,243,.72);
-      line-height: 1.35;
-    }
-
-    /* ✅ Front prompt centered in the card */
+    /* Front prompt centered */
     .front-center{
-      flex: 1;
+      flex: 1 1 auto;
       display:flex;
       align-items:center;
       justify-content:center;
@@ -270,6 +266,7 @@
       font-size: 12px;
       color: rgba(243,243,243,.72);
       line-height: 1.35;
+      min-height: 0;
     }
 
     .bottom{
@@ -281,6 +278,7 @@
       font-size: 11px;
       color: rgba(243,243,243,.65);
       letter-spacing: .3px;
+      flex: 0 0 auto;
     }
 
     .stamp{
@@ -296,6 +294,7 @@
       font-size: 10px;
     }
 
+    /* Fortune text */
     .fortune{
       padding: 14px 16px 0;
       text-align:center;
@@ -314,12 +313,30 @@
       margin-bottom: 8px;
     }
 
+    /* ✅ FIX: prevent back text clipping */
+    .back-body{
+      flex: 1 1 auto;
+      min-height: 0;           /* critical for scrolling in flex containers */
+      overflow-y: auto;        /* scroll if needed, instead of clipping */
+      padding-bottom: 10px;    /* spacing above bottom bar */
+    }
+    .back-body::-webkit-scrollbar{ width: 8px; }
+    .back-body::-webkit-scrollbar-thumb{
+      background: rgba(249,202,59,.25);
+      border-radius: 99px;
+    }
+    .back-body::-webkit-scrollbar-track{
+      background: rgba(0,0,0,.15);
+    }
+
+    /* Accessibility focus */
     .card:focus-visible{
       outline: 2px solid rgba(249,202,59,.9);
       outline-offset: 4px;
       border-radius: var(--radius);
     }
 
+    /* Responsive */
     @media (max-width: 860px){
       :root{ --cardW: 155px; --cardH: 245px; }
     }
@@ -362,7 +379,7 @@
             </div>
             <div class="face back">
               <div class="topbar"><span>revealed</span><span class="sigil">Ⅰ</span></div>
-              <div>
+              <div class="back-body">
                 <div class="fortune"><strong>Your fortune</strong></div>
                 <div class="cardname back-title"></div>
                 <div class="divider"></div>
@@ -383,7 +400,7 @@
             </div>
             <div class="face back">
               <div class="topbar"><span>revealed</span><span class="sigil">Ⅱ</span></div>
-              <div>
+              <div class="back-body">
                 <div class="fortune"><strong>Your fortune</strong></div>
                 <div class="cardname back-title"></div>
                 <div class="divider"></div>
@@ -404,7 +421,7 @@
             </div>
             <div class="face back">
               <div class="topbar"><span>revealed</span><span class="sigil">Ⅲ</span></div>
-              <div>
+              <div class="back-body">
                 <div class="fortune"><strong>Your fortune</strong></div>
                 <div class="cardname back-title"></div>
                 <div class="divider"></div>
@@ -425,7 +442,7 @@
             </div>
             <div class="face back">
               <div class="topbar"><span>revealed</span><span class="sigil">Ⅳ</span></div>
-              <div>
+              <div class="back-body">
                 <div class="fortune"><strong>Your fortune</strong></div>
                 <div class="cardname back-title"></div>
                 <div class="divider"></div>
@@ -447,7 +464,7 @@
             </div>
             <div class="face back">
               <div class="topbar"><span>revealed</span><span class="sigil">Ⅴ</span></div>
-              <div>
+              <div class="back-body">
                 <div class="fortune"><strong>Your fortune</strong></div>
                 <div class="cardname back-title"></div>
                 <div class="divider"></div>
@@ -468,7 +485,7 @@
             </div>
             <div class="face back">
               <div class="topbar"><span>revealed</span><span class="sigil">Ⅵ</span></div>
-              <div>
+              <div class="back-body">
                 <div class="fortune"><strong>Your fortune</strong></div>
                 <div class="cardname back-title"></div>
                 <div class="divider"></div>
@@ -490,7 +507,7 @@
             </div>
             <div class="face back">
               <div class="topbar"><span>revealed</span><span class="sigil">Ⅶ</span></div>
-              <div>
+              <div class="back-body">
                 <div class="fortune"><strong>Your fortune</strong></div>
                 <div class="cardname back-title"></div>
                 <div class="divider"></div>
@@ -511,7 +528,7 @@
             </div>
             <div class="face back">
               <div class="topbar"><span>revealed</span><span class="sigil">Ⅷ</span></div>
-              <div>
+              <div class="back-body">
                 <div class="fortune"><strong>Your fortune</strong></div>
                 <div class="cardname back-title"></div>
                 <div class="divider"></div>
@@ -532,7 +549,7 @@
             </div>
             <div class="face back">
               <div class="topbar"><span>revealed</span><span class="sigil">Ⅸ</span></div>
-              <div>
+              <div class="back-body">
                 <div class="fortune"><strong>Your fortune</strong></div>
                 <div class="cardname back-title"></div>
                 <div class="divider"></div>
@@ -553,7 +570,7 @@
             </div>
             <div class="face back">
               <div class="topbar"><span>revealed</span><span class="sigil">Ⅹ</span></div>
-              <div>
+              <div class="back-body">
                 <div class="fortune"><strong>Your fortune</strong></div>
                 <div class="cardname back-title"></div>
                 <div class="divider"></div>
@@ -620,10 +637,8 @@
       const n = Number(card.dataset.card);
       const text = fortunes[n] || "Your fortune awaits.";
 
-      // fortune text
       card.querySelectorAll(".fortune-text").forEach(t => t.textContent = text);
 
-      // back title
       const title = card.dataset.title || "";
       card.querySelectorAll(".back-title").forEach(t => t.textContent = title);
 
