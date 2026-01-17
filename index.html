@@ -130,28 +130,58 @@
       box-shadow: 0 18px 50px rgba(0,0,0,.35);
     }
 
-   /* ✅ 4–2–4 layout (explicit placement) */
-.grid{
-  display:grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
-  justify-items: center;
-  align-items: start;
-}
+ <!-- ✅ ONLY the parts you need to change: CSS grid + the 10 slot wrappers -->
+<style>
+  /* 4 columns total.
+     Row 1: 4 cards
+     Row 2: 2 cards centered (cols 2 & 3)
+     Row 3: 4 cards
+  */
+  .grid{
+    display:grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    justify-items: center;
+    align-items: start;
+    grid-auto-flow: row;
+  }
 
-/* Explicit row/col placement */
-.top-1 { grid-row: 1; grid-column: 1; }
-.top-2 { grid-row: 1; grid-column: 2; }
-.top-3 { grid-row: 1; grid-column: 3; }
-.top-4 { grid-row: 1; grid-column: 4; }
+  .slot{
+    width: var(--cardW);
+    height: var(--cardH);
+    perspective: 1200px;
+  }
 
-.mid-left  { grid-row: 2; grid-column: 2; }
-.mid-right { grid-row: 2; grid-column: 3; }
+  /* Center the middle row explicitly and FORCE it to be row 2 */
+  .mid-left  { grid-column: 2; grid-row: 2; }
+  .mid-right { grid-column: 3; grid-row: 2; }
 
-.bot-7  { grid-row: 3; grid-column: 1; }
-.bot-8  { grid-row: 3; grid-column: 2; }
-.bot-9  { grid-row: 3; grid-column: 3; }
-.bot-10 { grid-row: 3; grid-column: 4; }
+  /* On small screens: just flow normally in 2 columns */
+  @media (max-width: 720px){
+    .grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .mid-left, .mid-right{ grid-column: auto; grid-row: auto; }
+    .slot{ width: min(170px, 42vw); }
+  }
+</style>
+
+<div class="grid" id="cardGrid">
+  <!-- Row 1 (4) -->
+  <div class="slot">...card 1...</div>
+  <div class="slot">...card 2...</div>
+  <div class="slot">...card 3...</div>
+  <div class="slot">...card 4...</div>
+
+  <!-- Row 2 (2 centered) -->
+  <div class="slot mid-left">...card 5...</div>
+  <div class="slot mid-right">...card 6...</div>
+
+  <!-- Row 3 (4) -->
+  <div class="slot">...card 7...</div>
+  <div class="slot">...card 8...</div>
+  <div class="slot">...card 9...</div>
+  <div class="slot">...card 10...</div>
+</div>
+
 
 /* On small screens: just flow normally */
 @media (max-width: 720px){
