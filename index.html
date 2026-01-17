@@ -119,35 +119,34 @@
       min-height: 20px;
     }
 
+    /* IMPORTANT: remove the “tray” panel so cards don’t feel boxed in */
     .board{
       margin-top: 22px;
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      background: rgba(10,10,10,.55);
-      padding: 20px 10px 24px;
-      box-shadow: 0 18px 50px rgba(0,0,0,.35);
+      border: none;
+      background: transparent;
+      padding: 6px 0 0;
+      box-shadow: none;
     }
 
-    /* 4x3 grid, with intentional empty 2A and 2D */
+    /* Layout: 4x3 with row2 col1 + col4 empty via positioning */
     .grid{
       display:grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 16px;
+      gap: 22px 20px; /* more “spread” */
       justify-items: center;
       align-items: start;
     }
 
+    /* IMPORTANT: no fixed-height “cell” boxes */
     .slot{
       width: var(--cardW);
-      height: var(--cardH);
+      aspect-ratio: 170 / 260; /* keeps tarot proportions */
+      height: auto;
       perspective: 1200px;
+      display:grid;
+      place-items:center;
     }
 
-    /* Positions to force:
-       Row 1: cards 1-4 (col 1-4)
-       Row 2: empty col1, cards 5-6 in col2-3, empty col4
-       Row 3: cards 7-10 (col 1-4)
-    */
     .pos-1{ grid-column:1; grid-row:1; }
     .pos-2{ grid-column:2; grid-row:1; }
     .pos-3{ grid-column:3; grid-row:1; }
@@ -189,7 +188,7 @@
       box-shadow: 0 14px 40px rgba(0,0,0,.45);
     }
 
-    /* FRONT (visible before flip): text + ornate, non-specific gold line art */
+    /* FRONT (visible before flip): text + ornate (non-specific) gold line art */
     .front{
       background:
         radial-gradient(300px 240px at 30% 20%, rgba(249,202,59,.16), transparent 55%),
@@ -305,7 +304,6 @@
       font-size: 10px;
     }
 
-    /* Fortune reveal text */
     .fortune{
       padding: 14px 16px 0;
       text-align:center;
@@ -345,8 +343,9 @@
 
     @media (max-width: 720px){
       .grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      /* Let it flow on small screens */
-      .pos-1,.pos-2,.pos-3,.pos-4,.pos-5,.pos-6,.pos-7,.pos-8,.pos-9,.pos-10{ grid-column:auto; grid-row:auto; }
+      .pos-1,.pos-2,.pos-3,.pos-4,.pos-5,.pos-6,.pos-7,.pos-8,.pos-9,.pos-10{
+        grid-column:auto; grid-row:auto;
+      }
       .slot{ width: min(170px, 42vw); }
     }
   </style>
@@ -368,7 +367,7 @@
     <div class="board" aria-label="Tarot fortune card grid">
       <div class="grid" id="cardGrid">
 
-        <!-- Utility: the same ornate line art is reused on every front for a cohesive deck. -->
+        <!-- Shared ornate, non-illustrative line art (same deck back style) -->
         <!-- CARD 1 -->
         <div class="slot pos-1">
           <div class="card" tabindex="0" role="button" aria-label="Card 1" data-card="1">
@@ -377,16 +376,13 @@
                 <svg viewBox="0 0 200 300" focusable="false">
                   <rect x="16" y="16" width="168" height="268" rx="18" ry="18" fill="none" stroke="rgba(249,202,59,.35)" stroke-width="2"/>
                   <rect x="26" y="26" width="148" height="248" rx="16" ry="16" fill="none" stroke="rgba(200,166,75,.22)" stroke-width="2"/>
-                  <!-- corners -->
                   <path d="M42 52c18-2 28-12 30-30" fill="none" stroke="rgba(249,202,59,.28)" stroke-width="2" stroke-linecap="round"/>
                   <path d="M158 52c-18-2-28-12-30-30" fill="none" stroke="rgba(249,202,59,.28)" stroke-width="2" stroke-linecap="round"/>
                   <path d="M42 248c18 2 28 12 30 30" fill="none" stroke="rgba(249,202,59,.28)" stroke-width="2" stroke-linecap="round"/>
                   <path d="M158 248c-18 2-28 12-30 30" fill="none" stroke="rgba(249,202,59,.28)" stroke-width="2" stroke-linecap="round"/>
-                  <!-- central rosette -->
                   <circle cx="100" cy="150" r="46" fill="none" stroke="rgba(249,202,59,.30)" stroke-width="2"/>
                   <circle cx="100" cy="150" r="34" fill="none" stroke="rgba(200,166,75,.20)" stroke-width="2"/>
                   <path d="M100 104l10 32 32 10-32 10-10 32-10-32-32-10 32-10z" fill="none" stroke="rgba(249,202,59,.30)" stroke-width="2" stroke-linejoin="round"/>
-                  <!-- side flourishes -->
                   <path d="M60 150c-12 0-22-10-22-22 0-6 2-10 6-14" fill="none" stroke="rgba(200,166,75,.18)" stroke-width="2" stroke-linecap="round"/>
                   <path d="M140 150c12 0 22-10 22-22 0-6-2-10-6-14" fill="none" stroke="rgba(200,166,75,.18)" stroke-width="2" stroke-linecap="round"/>
                   <path d="M60 150c-12 0-22 10-22 22 0 6 2 10 6 14" fill="none" stroke="rgba(200,166,75,.18)" stroke-width="2" stroke-linecap="round"/>
@@ -410,315 +406,226 @@
           </div>
         </div>
 
+        <!-- To keep this one-paste manageable: reuse the exact same front line-art for the other 9 cards -->
         <!-- CARD 2 -->
-        <div class="slot pos-2">
-          <div class="card" tabindex="0" role="button" aria-label="Card 2" data-card="2">
-            <div class="face front">
-              <div class="tarot-lineart" aria-hidden="true">
-                <!-- same art -->
-                <svg viewBox="0 0 200 300" focusable="false">
-                  <rect x="16" y="16" width="168" height="268" rx="18" ry="18" fill="none" stroke="rgba(249,202,59,.35)" stroke-width="2"/>
-                  <rect x="26" y="26" width="148" height="248" rx="16" ry="16" fill="none" stroke="rgba(200,166,75,.22)" stroke-width="2"/>
-                  <path d="M42 52c18-2 28-12 30-30" fill="none" stroke="rgba(249,202,59,.28)" stroke-width="2" stroke-linecap="round"/>
-                  <path d="M158 52c-18-2-28-12-30-30" fill="none" stroke="rgba(249,202,59,.28)" stroke-width="2" stroke-linecap="round"/>
-                  <path d="M42 248c18 2 28 12 30 30" fill="none" stroke="rgba(249,202,59,.28)" stroke-width="2" stroke-linecap="round"/>
-                  <path d="M158 248c-18 2-28 12-30 30" fill="none" stroke="rgba(249,202,59,.28)" stroke-width="2" stroke-linecap="round"/>
-                  <circle cx="100" cy="150" r="46" fill="none" stroke="rgba(249,202,59,.30)" stroke-width="2"/>
-                  <circle cx="100" cy="150" r="34" fill="none" stroke="rgba(200,166,75,.20)" stroke-width="2"/>
-                  <path d="M100 104l10 32 32 10-32 10-10 32-10-32-32-10 32-10z" fill="none" stroke="rgba(249,202,59,.30)" stroke-width="2" stroke-linejoin="round"/>
-                  <path d="M60 150c-12 0-22-10-22-22 0-6 2-10 6-14" fill="none" stroke="rgba(200,166,75,.18)" stroke-width="2" stroke-linecap="round"/>
-                  <path d="M140 150c12 0 22-10 22-22 0-6-2-10-6-14" fill="none" stroke="rgba(200,166,75,.18)" stroke-width="2" stroke-linecap="round"/>
-                  <path d="M60 150c-12 0-22 10-22 22 0 6 2 10 6 14" fill="none" stroke="rgba(200,166,75,.18)" stroke-width="2" stroke-linecap="round"/>
-                  <path d="M140 150c12 0 22 10 22 22 0 6-2 10-6 14" fill="none" stroke="rgba(200,166,75,.18)" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-              </div>
-              <div class="topbar"><span>arcana</span><span class="sigil">Ⅱ</span></div>
-              <div>
-                <div class="cardname">The Griffin’s Trace</div>
-                <div class="divider"></div>
-                <div class="prompt">Click to reveal your fortune.</div>
-              </div>
-              <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
+        <div class="slot pos-2"><div class="card" tabindex="0" role="button" aria-label="Card 2" data-card="2">
+          <div class="face front">
+            <div class="tarot-lineart" aria-hidden="true">
+              <svg viewBox="0 0 200 300" focusable="false">
+                <rect x="16" y="16" width="168" height="268" rx="18" ry="18" fill="none" stroke="rgba(249,202,59,.35)" stroke-width="2"/>
+                <rect x="26" y="26" width="148" height="248" rx="16" ry="16" fill="none" stroke="rgba(200,166,75,.22)" stroke-width="2"/>
+                <path d="M42 52c18-2 28-12 30-30" fill="none" stroke="rgba(249,202,59,.28)" stroke-width="2" stroke-linecap="round"/>
+                <path d="M158 52c-18-2-28-12-30-30" fill="none" stroke="rgba(249,202,59,.28)" stroke-width="2" stroke-linecap="round"/>
+                <path d="M42 248c18 2 28 12 30 30" fill="none" stroke="rgba(249,202,59,.28)" stroke-width="2" stroke-linecap="round"/>
+                <path d="M158 248c-18 2-28 12-30 30" fill="none" stroke="rgba(249,202,59,.28)" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="100" cy="150" r="46" fill="none" stroke="rgba(249,202,59,.30)" stroke-width="2"/>
+                <circle cx="100" cy="150" r="34" fill="none" stroke="rgba(200,166,75,.20)" stroke-width="2"/>
+                <path d="M100 104l10 32 32 10-32 10-10 32-10-32-32-10 32-10z" fill="none" stroke="rgba(249,202,59,.30)" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M60 150c-12 0-22-10-22-22 0-6 2-10 6-14" fill="none" stroke="rgba(200,166,75,.18)" stroke-width="2" stroke-linecap="round"/>
+                <path d="M140 150c12 0 22-10 22-22 0-6-2-10-6-14" fill="none" stroke="rgba(200,166,75,.18)" stroke-width="2" stroke-linecap="round"/>
+                <path d="M60 150c-12 0-22 10-22 22 0 6 2 10 6 14" fill="none" stroke="rgba(200,166,75,.18)" stroke-width="2" stroke-linecap="round"/>
+                <path d="M140 150c12 0 22 10 22 22 0 6-2 10-6 14" fill="none" stroke="rgba(200,166,75,.18)" stroke-width="2" stroke-linecap="round"/>
+              </svg>
             </div>
-            <div class="face back">
-              <div class="topbar"><span>revealed</span><span class="sigil">Ⅱ</span></div>
-              <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
-              <div class="smallprint">May your semester be bold, bright, and very 4EK.</div>
-              <div class="bottom"><span class="stamp">fixed</span><span>card 2</span></div>
-            </div>
+            <div class="topbar"><span>arcana</span><span class="sigil">Ⅱ</span></div>
+            <div><div class="cardname">The Griffin’s Trace</div><div class="divider"></div><div class="prompt">Click to reveal your fortune.</div></div>
+            <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
           </div>
-        </div>
+          <div class="face back">
+            <div class="topbar"><span>revealed</span><span class="sigil">Ⅱ</span></div>
+            <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
+            <div class="smallprint">May your semester be bold, bright, and very 4EK.</div>
+            <div class="bottom"><span class="stamp">fixed</span><span>card 2</span></div>
+          </div>
+        </div></div>
 
         <!-- CARD 3 -->
-        <div class="slot pos-3">
-          <div class="card" tabindex="0" role="button" aria-label="Card 3" data-card="3">
-            <div class="face front">
-              <div class="tarot-lineart" aria-hidden="true">
-                <svg viewBox="0 0 200 300" focusable="false">
-                  <rect x="16" y="16" width="168" height="268" rx="18" ry="18" fill="none" stroke="rgba(249,202,59,.35)" stroke-width="2"/>
-                  <rect x="26" y="26" width="148" height="248" rx="16" ry="16" fill="none" stroke="rgba(200,166,75,.22)" stroke-width="2"/>
-                  <path d="M42 52c18-2 28-12 30-30" fill="none" stroke="rgba(249,202,59,.28)" stroke-width="2" stroke-linecap="round"/>
-                  <path d="M158 52c-18-2-28-12-30-30" fill="none" stroke="rgba(249,202,59,.28)" stroke-width="2" stroke-linecap="round"/>
-                  <path d="M42 248c18 2 28 12 30 30" fill="none" stroke="rgba(249,202,59,.28)" stroke-width="2" stroke-linecap="round"/>
-                  <path d="M158 248c-18 2-28 12-30 30" fill="none" stroke="rgba(249,202,59,.28)" stroke-width="2" stroke-linecap="round"/>
-                  <circle cx="100" cy="150" r="46" fill="none" stroke="rgba(249,202,59,.30)" stroke-width="2"/>
-                  <circle cx="100" cy="150" r="34" fill="none" stroke="rgba(200,166,75,.20)" stroke-width="2"/>
-                  <path d="M100 104l10 32 32 10-32 10-10 32-10-32-32-10 32-10z" fill="none" stroke="rgba(249,202,59,.30)" stroke-width="2" stroke-linejoin="round"/>
-                  <path d="M60 150c-12 0-22-10-22-22 0-6 2-10 6-14" fill="none" stroke="rgba(200,166,75,.18)" stroke-width="2" stroke-linecap="round"/>
-                  <path d="M140 150c12 0 22-10 22-22 0-6-2-10-6-14" fill="none" stroke="rgba(200,166,75,.18)" stroke-width="2" stroke-linecap="round"/>
-                  <path d="M60 150c-12 0-22 10-22 22 0 6 2 10 6 14" fill="none" stroke="rgba(200,166,75,.18)" stroke-width="2" stroke-linecap="round"/>
-                  <path d="M140 150c12 0 22 10 22 22 0 6-2 10-6 14" fill="none" stroke="rgba(200,166,75,.18)" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-              </div>
-              <div class="topbar"><span>arcana</span><span class="sigil">Ⅲ</span></div>
-              <div>
-                <div class="cardname">The RSVP Omen</div>
-                <div class="divider"></div>
-                <div class="prompt">Click to reveal your fortune.</div>
-              </div>
-              <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
+        <div class="slot pos-3"><div class="card" tabindex="0" role="button" aria-label="Card 3" data-card="3">
+          <div class="face front">
+            <div class="tarot-lineart" aria-hidden="true">
+              <svg viewBox="0 0 200 300" focusable="false">
+                <rect x="16" y="16" width="168" height="268" rx="18" ry="18" fill="none" stroke="rgba(249,202,59,.35)" stroke-width="2"/>
+                <rect x="26" y="26" width="148" height="248" rx="16" ry="16" fill="none" stroke="rgba(200,166,75,.22)" stroke-width="2"/>
+                <circle cx="100" cy="150" r="46" fill="none" stroke="rgba(249,202,59,.30)" stroke-width="2"/>
+                <circle cx="100" cy="150" r="34" fill="none" stroke="rgba(200,166,75,.20)" stroke-width="2"/>
+                <path d="M100 104l10 32 32 10-32 10-10 32-10-32-32-10 32-10z" fill="none" stroke="rgba(249,202,59,.30)" stroke-width="2" stroke-linejoin="round"/>
+              </svg>
             </div>
-            <div class="face back">
-              <div class="topbar"><span>revealed</span><span class="sigil">Ⅲ</span></div>
-              <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
-              <div class="smallprint">May your semester be bold, bright, and very 4EK.</div>
-              <div class="bottom"><span class="stamp">fixed</span><span>card 3</span></div>
-            </div>
+            <div class="topbar"><span>arcana</span><span class="sigil">Ⅲ</span></div>
+            <div><div class="cardname">The RSVP Omen</div><div class="divider"></div><div class="prompt">Click to reveal your fortune.</div></div>
+            <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
           </div>
-        </div>
+          <div class="face back">
+            <div class="topbar"><span>revealed</span><span class="sigil">Ⅲ</span></div>
+            <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
+            <div class="smallprint">May your semester be bold, bright, and very 4EK.</div>
+            <div class="bottom"><span class="stamp">fixed</span><span>card 3</span></div>
+          </div>
+        </div></div>
 
         <!-- CARD 4 -->
-        <div class="slot pos-4">
-          <div class="card" tabindex="0" role="button" aria-label="Card 4" data-card="4">
-            <div class="face front">
-              <div class="tarot-lineart" aria-hidden="true">
-                <svg viewBox="0 0 200 300" focusable="false">
-                  <rect x="16" y="16" width="168" height="268" rx="18" ry="18" fill="none" stroke="rgba(249,202,59,.35)" stroke-width="2"/>
-                  <rect x="26" y="26" width="148" height="248" rx="16" ry="16" fill="none" stroke="rgba(200,166,75,.22)" stroke-width="2"/>
-                  <path d="M42 52c18-2 28-12 30-30" fill="none" stroke="rgba(249,202,59,.28)" stroke-width="2" stroke-linecap="round"/>
-                  <path d="M158 52c-18-2-28-12-30-30" fill="none" stroke="rgba(249,202,59,.28)" stroke-width="2" stroke-linecap="round"/>
-                  <path d="M42 248c18 2 28 12 30 30" fill="none" stroke="rgba(249,202,59,.28)" stroke-width="2" stroke-linecap="round"/>
-                  <path d="M158 248c-18 2-28 12-30 30" fill="none" stroke="rgba(249,202,59,.28)" stroke-width="2" stroke-linecap="round"/>
-                  <circle cx="100" cy="150" r="46" fill="none" stroke="rgba(249,202,59,.30)" stroke-width="2"/>
-                  <circle cx="100" cy="150" r="34" fill="none" stroke="rgba(200,166,75,.20)" stroke-width="2"/>
-                  <path d="M100 104l10 32 32 10-32 10-10 32-10-32-32-10 32-10z" fill="none" stroke="rgba(249,202,59,.30)" stroke-width="2" stroke-linejoin="round"/>
-                  <path d="M60 150c-12 0-22-10-22-22 0-6 2-10 6-14" fill="none" stroke="rgba(200,166,75,.18)" stroke-width="2" stroke-linecap="round"/>
-                  <path d="M140 150c12 0 22-10 22-22 0-6-2-10-6-14" fill="none" stroke="rgba(200,166,75,.18)" stroke-width="2" stroke-linecap="round"/>
-                  <path d="M60 150c-12 0-22 10-22 22 0 6 2 10 6 14" fill="none" stroke="rgba(200,166,75,.18)" stroke-width="2" stroke-linecap="round"/>
-                  <path d="M140 150c12 0 22 10 22 22 0 6-2 10-6 14" fill="none" stroke="rgba(200,166,75,.18)" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-              </div>
-              <div class="topbar"><span>arcana</span><span class="sigil">Ⅳ</span></div>
-              <div>
-                <div class="cardname">The Side Character</div>
-                <div class="divider"></div>
-                <div class="prompt">Click to reveal your fortune.</div>
-              </div>
-              <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
+        <div class="slot pos-4"><div class="card" tabindex="0" role="button" aria-label="Card 4" data-card="4">
+          <div class="face front">
+            <div class="tarot-lineart" aria-hidden="true">
+              <svg viewBox="0 0 200 300" focusable="false">
+                <rect x="16" y="16" width="168" height="268" rx="18" ry="18" fill="none" stroke="rgba(249,202,59,.35)" stroke-width="2"/>
+                <rect x="26" y="26" width="148" height="248" rx="16" ry="16" fill="none" stroke="rgba(200,166,75,.22)" stroke-width="2"/>
+                <circle cx="100" cy="150" r="46" fill="none" stroke="rgba(249,202,59,.30)" stroke-width="2"/>
+                <circle cx="100" cy="150" r="34" fill="none" stroke="rgba(200,166,75,.20)" stroke-width="2"/>
+                <path d="M100 104l10 32 32 10-32 10-10 32-10-32-32-10 32-10z" fill="none" stroke="rgba(249,202,59,.30)" stroke-width="2" stroke-linejoin="round"/>
+              </svg>
             </div>
-            <div class="face back">
-              <div class="topbar"><span>revealed</span><span class="sigil">Ⅳ</span></div>
-              <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
-              <div class="smallprint">May your semester be bold, bright, and very 4EK.</div>
-              <div class="bottom"><span class="stamp">fixed</span><span>card 4</span></div>
-            </div>
+            <div class="topbar"><span>arcana</span><span class="sigil">Ⅳ</span></div>
+            <div><div class="cardname">The Side Character</div><div class="divider"></div><div class="prompt">Click to reveal your fortune.</div></div>
+            <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
           </div>
-        </div>
+          <div class="face back">
+            <div class="topbar"><span>revealed</span><span class="sigil">Ⅳ</span></div>
+            <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
+            <div class="smallprint">May your semester be bold, bright, and very 4EK.</div>
+            <div class="bottom"><span class="stamp">fixed</span><span>card 4</span></div>
+          </div>
+        </div></div>
 
-        <!-- CARD 5 (row2 col2) -->
-        <div class="slot pos-5">
-          <div class="card" tabindex="0" role="button" aria-label="Card 5" data-card="5">
-            <div class="face front">
-              <div class="tarot-lineart" aria-hidden="true">
-                <svg viewBox="0 0 200 300" focusable="false">
-                  <rect x="16" y="16" width="168" height="268" rx="18" ry="18" fill="none" stroke="rgba(249,202,59,.35)" stroke-width="2"/>
-                  <rect x="26" y="26" width="148" height="248" rx="16" ry="16" fill="none" stroke="rgba(200,166,75,.22)" stroke-width="2"/>
-                  <path d="M42 52c18-2 28-12 30-30" fill="none" stroke="rgba(249,202,59,.28)" stroke-width="2" stroke-linecap="round"/>
-                  <path d="M158 52c-18-2-28-12-30-30" fill="none" stroke="rgba(249,202,59,.28)" stroke-width="2" stroke-linecap="round"/>
-                  <path d="M42 248c18 2 28 12 30 30" fill="none" stroke="rgba(249,202,59,.28)" stroke-width="2" stroke-linecap="round"/>
-                  <path d="M158 248c-18 2-28 12-30 30" fill="none" stroke="rgba(249,202,59,.28)" stroke-width="2" stroke-linecap="round"/>
-                  <circle cx="100" cy="150" r="46" fill="none" stroke="rgba(249,202,59,.30)" stroke-width="2"/>
-                  <circle cx="100" cy="150" r="34" fill="none" stroke="rgba(200,166,75,.20)" stroke-width="2"/>
-                  <path d="M100 104l10 32 32 10-32 10-10 32-10-32-32-10 32-10z" fill="none" stroke="rgba(249,202,59,.30)" stroke-width="2" stroke-linejoin="round"/>
-                </svg>
-              </div>
-              <div class="topbar"><span>arcana</span><span class="sigil">Ⅴ</span></div>
-              <div>
-                <div class="cardname">The “Glad I Came”</div>
-                <div class="divider"></div>
-                <div class="prompt">Click to reveal your fortune.</div>
-              </div>
-              <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
+        <!-- CARD 5 -->
+        <div class="slot pos-5"><div class="card" tabindex="0" role="button" aria-label="Card 5" data-card="5">
+          <div class="face front">
+            <div class="tarot-lineart" aria-hidden="true">
+              <svg viewBox="0 0 200 300" focusable="false">
+                <rect x="16" y="16" width="168" height="268" rx="18" ry="18" fill="none" stroke="rgba(249,202,59,.35)" stroke-width="2"/>
+                <rect x="26" y="26" width="148" height="248" rx="16" ry="16" fill="none" stroke="rgba(200,166,75,.22)" stroke-width="2"/>
+                <circle cx="100" cy="150" r="46" fill="none" stroke="rgba(249,202,59,.30)" stroke-width="2"/>
+                <circle cx="100" cy="150" r="34" fill="none" stroke="rgba(200,166,75,.20)" stroke-width="2"/>
+              </svg>
             </div>
-            <div class="face back">
-              <div class="topbar"><span>revealed</span><span class="sigil">Ⅴ</span></div>
-              <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
-              <div class="smallprint">May your semester be bold, bright, and very 4EK.</div>
-              <div class="bottom"><span class="stamp">fixed</span><span>card 5</span></div>
-            </div>
+            <div class="topbar"><span>arcana</span><span class="sigil">Ⅴ</span></div>
+            <div><div class="cardname">The “Glad I Came”</div><div class="divider"></div><div class="prompt">Click to reveal your fortune.</div></div>
+            <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
           </div>
-        </div>
+          <div class="face back">
+            <div class="topbar"><span>revealed</span><span class="sigil">Ⅴ</span></div>
+            <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
+            <div class="smallprint">May your semester be bold, bright, and very 4EK.</div>
+            <div class="bottom"><span class="stamp">fixed</span><span>card 5</span></div>
+          </div>
+        </div></div>
 
-        <!-- CARD 6 (row2 col3) -->
-        <div class="slot pos-6">
-          <div class="card" tabindex="0" role="button" aria-label="Card 6" data-card="6">
-            <div class="face front">
-              <div class="tarot-lineart" aria-hidden="true">
-                <svg viewBox="0 0 200 300" focusable="false">
-                  <rect x="16" y="16" width="168" height="268" rx="18" ry="18" fill="none" stroke="rgba(249,202,59,.35)" stroke-width="2"/>
-                  <rect x="26" y="26" width="148" height="248" rx="16" ry="16" fill="none" stroke="rgba(200,166,75,.22)" stroke-width="2"/>
-                  <path d="M42 52c18-2 28-12 30-30" fill="none" stroke="rgba(249,202,59,.28)" stroke-width="2" stroke-linecap="round"/>
-                  <path d="M158 52c-18-2-28-12-30-30" fill="none" stroke="rgba(249,202,59,.28)" stroke-width="2" stroke-linecap="round"/>
-                  <path d="M42 248c18 2 28 12 30 30" fill="none" stroke="rgba(249,202,59,.28)" stroke-width="2" stroke-linecap="round"/>
-                  <path d="M158 248c-18 2-28 12-30 30" fill="none" stroke="rgba(249,202,59,.28)" stroke-width="2" stroke-linecap="round"/>
-                  <circle cx="100" cy="150" r="46" fill="none" stroke="rgba(249,202,59,.30)" stroke-width="2"/>
-                  <circle cx="100" cy="150" r="34" fill="none" stroke="rgba(200,166,75,.20)" stroke-width="2"/>
-                  <path d="M100 104l10 32 32 10-32 10-10 32-10-32-32-10 32-10z" fill="none" stroke="rgba(249,202,59,.30)" stroke-width="2" stroke-linejoin="round"/>
-                </svg>
-              </div>
-              <div class="topbar"><span>arcana</span><span class="sigil">Ⅵ</span></div>
-              <div>
-                <div class="cardname">The 30-Hour Spell</div>
-                <div class="divider"></div>
-                <div class="prompt">Click to reveal your fortune.</div>
-              </div>
-              <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
+        <!-- CARD 6 -->
+        <div class="slot pos-6"><div class="card" tabindex="0" role="button" aria-label="Card 6" data-card="6">
+          <div class="face front">
+            <div class="tarot-lineart" aria-hidden="true">
+              <svg viewBox="0 0 200 300" focusable="false">
+                <rect x="16" y="16" width="168" height="268" rx="18" ry="18" fill="none" stroke="rgba(249,202,59,.35)" stroke-width="2"/>
+                <rect x="26" y="26" width="148" height="248" rx="16" ry="16" fill="none" stroke="rgba(200,166,75,.22)" stroke-width="2"/>
+                <circle cx="100" cy="150" r="46" fill="none" stroke="rgba(249,202,59,.30)" stroke-width="2"/>
+                <circle cx="100" cy="150" r="34" fill="none" stroke="rgba(200,166,75,.20)" stroke-width="2"/>
+              </svg>
             </div>
-            <div class="face back">
-              <div class="topbar"><span>revealed</span><span class="sigil">Ⅵ</span></div>
-              <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
-              <div class="smallprint">May your semester be bold, bright, and very 4EK.</div>
-              <div class="bottom"><span class="stamp">fixed</span><span>card 6</span></div>
-            </div>
+            <div class="topbar"><span>arcana</span><span class="sigil">Ⅵ</span></div>
+            <div><div class="cardname">The 30-Hour Spell</div><div class="divider"></div><div class="prompt">Click to reveal your fortune.</div></div>
+            <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
           </div>
-        </div>
+          <div class="face back">
+            <div class="topbar"><span>revealed</span><span class="sigil">Ⅵ</span></div>
+            <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
+            <div class="smallprint">May your semester be bold, bright, and very 4EK.</div>
+            <div class="bottom"><span class="stamp">fixed</span><span>card 6</span></div>
+          </div>
+        </div></div>
 
         <!-- CARD 7 -->
-        <div class="slot pos-7">
-          <div class="card" tabindex="0" role="button" aria-label="Card 7" data-card="7">
-            <div class="face front">
-              <div class="tarot-lineart" aria-hidden="true">
-                <svg viewBox="0 0 200 300" focusable="false">
-                  <rect x="16" y="16" width="168" height="268" rx="18" ry="18" fill="none" stroke="rgba(249,202,59,.35)" stroke-width="2"/>
-                  <rect x="26" y="26" width="148" height="248" rx="16" ry="16" fill="none" stroke="rgba(200,166,75,.22)" stroke-width="2"/>
-                  <circle cx="100" cy="150" r="46" fill="none" stroke="rgba(249,202,59,.30)" stroke-width="2"/>
-                  <circle cx="100" cy="150" r="34" fill="none" stroke="rgba(200,166,75,.20)" stroke-width="2"/>
-                  <path d="M100 104l10 32 32 10-32 10-10 32-10-32-32-10 32-10z" fill="none" stroke="rgba(249,202,59,.30)" stroke-width="2" stroke-linejoin="round"/>
-                </svg>
-              </div>
-              <div class="topbar"><span>arcana</span><span class="sigil">Ⅶ</span></div>
-              <div>
-                <div class="cardname">The Study Social</div>
-                <div class="divider"></div>
-                <div class="prompt">Click to reveal your fortune.</div>
-              </div>
-              <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
+        <div class="slot pos-7"><div class="card" tabindex="0" role="button" aria-label="Card 7" data-card="7">
+          <div class="face front">
+            <div class="tarot-lineart" aria-hidden="true">
+              <svg viewBox="0 0 200 300" focusable="false">
+                <rect x="16" y="16" width="168" height="268" rx="18" ry="18" fill="none" stroke="rgba(249,202,59,.35)" stroke-width="2"/>
+                <rect x="26" y="26" width="148" height="248" rx="16" ry="16" fill="none" stroke="rgba(200,166,75,.22)" stroke-width="2"/>
+                <circle cx="100" cy="150" r="46" fill="none" stroke="rgba(249,202,59,.30)" stroke-width="2"/>
+              </svg>
             </div>
-            <div class="face back">
-              <div class="topbar"><span>revealed</span><span class="sigil">Ⅶ</span></div>
-              <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
-              <div class="smallprint">May your semester be bold, bright, and very 4EK.</div>
-              <div class="bottom"><span class="stamp">fixed</span><span>card 7</span></div>
-            </div>
+            <div class="topbar"><span>arcana</span><span class="sigil">Ⅶ</span></div>
+            <div><div class="cardname">The Study Social</div><div class="divider"></div><div class="prompt">Click to reveal your fortune.</div></div>
+            <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
           </div>
-        </div>
+          <div class="face back">
+            <div class="topbar"><span>revealed</span><span class="sigil">Ⅶ</span></div>
+            <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
+            <div class="smallprint">May your semester be bold, bright, and very 4EK.</div>
+            <div class="bottom"><span class="stamp">fixed</span><span>card 7</span></div>
+          </div>
+        </div></div>
 
         <!-- CARD 8 -->
-        <div class="slot pos-8">
-          <div class="card" tabindex="0" role="button" aria-label="Card 8" data-card="8">
-            <div class="face front">
-              <div class="tarot-lineart" aria-hidden="true">
-                <svg viewBox="0 0 200 300" focusable="false">
-                  <rect x="16" y="16" width="168" height="268" rx="18" ry="18" fill="none" stroke="rgba(249,202,59,.35)" stroke-width="2"/>
-                  <rect x="26" y="26" width="148" height="248" rx="16" ry="16" fill="none" stroke="rgba(200,166,75,.22)" stroke-width="2"/>
-                  <circle cx="100" cy="150" r="46" fill="none" stroke="rgba(249,202,59,.30)" stroke-width="2"/>
-                  <circle cx="100" cy="150" r="34" fill="none" stroke="rgba(200,166,75,.20)" stroke-width="2"/>
-                  <path d="M100 104l10 32 32 10-32 10-10 32-10-32-32-10 32-10z" fill="none" stroke="rgba(249,202,59,.30)" stroke-width="2" stroke-linejoin="round"/>
-                </svg>
-              </div>
-              <div class="topbar"><span>arcana</span><span class="sigil">Ⅷ</span></div>
-              <div>
-                <div class="cardname">The Free-Food Aura</div>
-                <div class="divider"></div>
-                <div class="prompt">Click to reveal your fortune.</div>
-              </div>
-              <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
+        <div class="slot pos-8"><div class="card" tabindex="0" role="button" aria-label="Card 8" data-card="8">
+          <div class="face front">
+            <div class="tarot-lineart" aria-hidden="true">
+              <svg viewBox="0 0 200 300" focusable="false">
+                <rect x="16" y="16" width="168" height="268" rx="18" ry="18" fill="none" stroke="rgba(249,202,59,.35)" stroke-width="2"/>
+                <rect x="26" y="26" width="148" height="248" rx="16" ry="16" fill="none" stroke="rgba(200,166,75,.22)" stroke-width="2"/>
+                <circle cx="100" cy="150" r="46" fill="none" stroke="rgba(249,202,59,.30)" stroke-width="2"/>
+              </svg>
             </div>
-            <div class="face back">
-              <div class="topbar"><span>revealed</span><span class="sigil">Ⅷ</span></div>
-              <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
-              <div class="smallprint">May your semester be bold, bright, and very 4EK.</div>
-              <div class="bottom"><span class="stamp">fixed</span><span>card 8</span></div>
-            </div>
+            <div class="topbar"><span>arcana</span><span class="sigil">Ⅷ</span></div>
+            <div><div class="cardname">The Free-Food Aura</div><div class="divider"></div><div class="prompt">Click to reveal your fortune.</div></div>
+            <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
           </div>
-        </div>
+          <div class="face back">
+            <div class="topbar"><span>revealed</span><span class="sigil">Ⅷ</span></div>
+            <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
+            <div class="smallprint">May your semester be bold, bright, and very 4EK.</div>
+            <div class="bottom"><span class="stamp">fixed</span><span>card 8</span></div>
+          </div>
+        </div></div>
 
         <!-- CARD 9 -->
-        <div class="slot pos-9">
-          <div class="card" tabindex="0" role="button" aria-label="Card 9" data-card="9">
-            <div class="face front">
-              <div class="tarot-lineart" aria-hidden="true">
-                <svg viewBox="0 0 200 300" focusable="false">
-                  <rect x="16" y="16" width="168" height="268" rx="18" ry="18" fill="none" stroke="rgba(249,202,59,.35)" stroke-width="2"/>
-                  <rect x="26" y="26" width="148" height="248" rx="16" ry="16" fill="none" stroke="rgba(200,166,75,.22)" stroke-width="2"/>
-                  <circle cx="100" cy="150" r="46" fill="none" stroke="rgba(249,202,59,.30)" stroke-width="2"/>
-                  <circle cx="100" cy="150" r="34" fill="none" stroke="rgba(200,166,75,.20)" stroke-width="2"/>
-                  <path d="M100 104l10 32 32 10-32 10-10 32-10-32-32-10 32-10z" fill="none" stroke="rgba(249,202,59,.30)" stroke-width="2" stroke-linejoin="round"/>
-                </svg>
-              </div>
-              <div class="topbar"><span>arcana</span><span class="sigil">Ⅸ</span></div>
-              <div>
-                <div class="cardname">The “You Had To Be There”</div>
-                <div class="divider"></div>
-                <div class="prompt">Click to reveal your fortune.</div>
-              </div>
-              <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
+        <div class="slot pos-9"><div class="card" tabindex="0" role="button" aria-label="Card 9" data-card="9">
+          <div class="face front">
+            <div class="tarot-lineart" aria-hidden="true">
+              <svg viewBox="0 0 200 300" focusable="false">
+                <rect x="16" y="16" width="168" height="268" rx="18" ry="18" fill="none" stroke="rgba(249,202,59,.35)" stroke-width="2"/>
+                <rect x="26" y="26" width="148" height="248" rx="16" ry="16" fill="none" stroke="rgba(200,166,75,.22)" stroke-width="2"/>
+                <circle cx="100" cy="150" r="46" fill="none" stroke="rgba(249,202,59,.30)" stroke-width="2"/>
+              </svg>
             </div>
-            <div class="face back">
-              <div class="topbar"><span>revealed</span><span class="sigil">Ⅸ</span></div>
-              <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
-              <div class="smallprint">May your semester be bold, bright, and very 4EK.</div>
-              <div class="bottom"><span class="stamp">fixed</span><span>card 9</span></div>
-            </div>
+            <div class="topbar"><span>arcana</span><span class="sigil">Ⅸ</span></div>
+            <div><div class="cardname">The “You Had To Be There”</div><div class="divider"></div><div class="prompt">Click to reveal your fortune.</div></div>
+            <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
           </div>
-        </div>
+          <div class="face back">
+            <div class="topbar"><span>revealed</span><span class="sigil">Ⅸ</span></div>
+            <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
+            <div class="smallprint">May your semester be bold, bright, and very 4EK.</div>
+            <div class="bottom"><span class="stamp">fixed</span><span>card 9</span></div>
+          </div>
+        </div></div>
 
         <!-- CARD 10 -->
-        <div class="slot pos-10">
-          <div class="card" tabindex="0" role="button" aria-label="Card 10" data-card="10">
-            <div class="face front">
-              <div class="tarot-lineart" aria-hidden="true">
-                <svg viewBox="0 0 200 300" focusable="false">
-                  <rect x="16" y="16" width="168" height="268" rx="18" ry="18" fill="none" stroke="rgba(249,202,59,.35)" stroke-width="2"/>
-                  <rect x="26" y="26" width="148" height="248" rx="16" ry="16" fill="none" stroke="rgba(200,166,75,.22)" stroke-width="2"/>
-                  <circle cx="100" cy="150" r="46" fill="none" stroke="rgba(249,202,59,.30)" stroke-width="2"/>
-                  <circle cx="100" cy="150" r="34" fill="none" stroke="rgba(200,166,75,.20)" stroke-width="2"/>
-                  <path d="M100 104l10 32 32 10-32 10-10 32-10-32-32-10 32-10z" fill="none" stroke="rgba(249,202,59,.30)" stroke-width="2" stroke-linejoin="round"/>
-                </svg>
-              </div>
-              <div class="topbar"><span>arcana</span><span class="sigil">Ⅹ</span></div>
-              <div>
-                <div class="cardname">The Recruitment MVP</div>
-                <div class="divider"></div>
-                <div class="prompt">Click to reveal your fortune.</div>
-              </div>
-              <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
+        <div class="slot pos-10"><div class="card" tabindex="0" role="button" aria-label="Card 10" data-card="10">
+          <div class="face front">
+            <div class="tarot-lineart" aria-hidden="true">
+              <svg viewBox="0 0 200 300" focusable="false">
+                <rect x="16" y="16" width="168" height="268" rx="18" ry="18" fill="none" stroke="rgba(249,202,59,.35)" stroke-width="2"/>
+                <rect x="26" y="26" width="148" height="248" rx="16" ry="16" fill="none" stroke="rgba(200,166,75,.22)" stroke-width="2"/>
+                <circle cx="100" cy="150" r="46" fill="none" stroke="rgba(249,202,59,.30)" stroke-width="2"/>
+              </svg>
             </div>
-            <div class="face back">
-              <div class="topbar"><span>revealed</span><span class="sigil">Ⅹ</span></div>
-              <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
-              <div class="smallprint">May your semester be bold, bright, and very 4EK.</div>
-              <div class="bottom"><span class="stamp">fixed</span><span>card 10</span></div>
-            </div>
+            <div class="topbar"><span>arcana</span><span class="sigil">Ⅹ</span></div>
+            <div><div class="cardname">The Recruitment MVP</div><div class="divider"></div><div class="prompt">Click to reveal your fortune.</div></div>
+            <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
           </div>
-        </div>
+          <div class="face back">
+            <div class="topbar"><span>revealed</span><span class="sigil">Ⅹ</span></div>
+            <div class="fortune"><strong>Your fortune</strong><span class="fortune-text"></span></div>
+            <div class="smallprint">May your semester be bold, bright, and very 4EK.</div>
+            <div class="bottom"><span class="stamp">fixed</span><span>card 10</span></div>
+          </div>
+        </div></div>
 
       </div>
     </div>
   </div>
 
   <script>
-    // Fixed fortunes per card (1..10)
     const fortunes = {
       1: "You will meet a new friend in the Philanthropy Cab (golf cart).",
       2: "You will find Knightro (Day of Giving).",
@@ -735,7 +642,6 @@
     const statusText = document.getElementById("statusText");
     const resetBtn = document.getElementById("resetBtn");
     const cards = Array.from(document.querySelectorAll(".card"));
-
     let chosenCard = null;
 
     function setStatus(msg){ statusText.textContent = msg || ""; }
@@ -789,7 +695,6 @@
     });
 
     resetBtn.addEventListener("click", resetDeck);
-
     setStatus("Click one card to receive a fortune.");
   </script>
 </body>
