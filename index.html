@@ -8,7 +8,6 @@
 
   <style>
     :root{
-      /* UCF-ish palette */
       --bg: #070707;
       --panel: rgba(16,16,16,.78);
       --gold: #C8A64B;
@@ -17,8 +16,6 @@
       --text: #F3F3F3;
       --muted: rgba(243,243,243,.78);
       --line: rgba(200,166,75,.35);
-
-      /* sizing */
       --cardW: 170px;
       --cardH: 260px;
       --radius: 18px;
@@ -145,21 +142,17 @@
       perspective: 1200px;
     }
 
-    /* Explicit placement */
     .t1{grid-row:1;grid-column:1}
     .t2{grid-row:1;grid-column:2}
     .t3{grid-row:1;grid-column:3}
     .t4{grid-row:1;grid-column:4}
-
     .m5{grid-row:2;grid-column:2}
     .m6{grid-row:2;grid-column:3}
-
     .b7{grid-row:3;grid-column:1}
     .b8{grid-row:3;grid-column:2}
     .b9{grid-row:3;grid-column:3}
     .b10{grid-row:3;grid-column:4}
 
-    /* Card */
     .card{
       width: 100%;
       height: 100%;
@@ -265,14 +258,18 @@
       line-height: 1.35;
     }
 
-    /* ✅ front prompt centered vertically */
-    .prompt.only{
-      padding: 0 16px;
+    /* ✅ Front prompt centered in the card */
+    .front-center{
       flex: 1;
       display:flex;
       align-items:center;
       justify-content:center;
+      padding: 0 16px;
       text-align:center;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-size: 12px;
+      color: rgba(243,243,243,.72);
+      line-height: 1.35;
     }
 
     .bottom{
@@ -299,7 +296,6 @@
       font-size: 10px;
     }
 
-    /* Fortune text */
     .fortune{
       padding: 14px 16px 0;
       text-align:center;
@@ -318,25 +314,19 @@
       margin-bottom: 8px;
     }
 
-    /* Accessibility focus */
     .card:focus-visible{
       outline: 2px solid rgba(249,202,59,.9);
       outline-offset: 4px;
       border-radius: var(--radius);
     }
 
-    /* Responsive */
     @media (max-width: 860px){
       :root{ --cardW: 155px; --cardH: 245px; }
     }
 
     @media (max-width: 720px){
-      /* On small screens: 2 columns, flow naturally */
       .grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .t1,.t2,.t3,.t4,.m5,.m6,.b7,.b8,.b9,.b10{
-        grid-row:auto;
-        grid-column:auto;
-      }
+      .t1,.t2,.t3,.t4,.m5,.m6,.b7,.b8,.b9,.b10{ grid-row:auto; grid-column:auto; }
       .slot{ width: min(170px, 42vw); }
     }
   </style>
@@ -361,32 +351,23 @@
     <div class="board" aria-label="Tarot fortune card grid">
       <div class="grid" id="cardGrid">
 
-        <!-- Helper: per card, set data-title to show on back -->
-        <!-- Row 1 (4) -->
+        <!-- Row 1 -->
         <div class="slot t1">
           <div class="card" tabindex="0" role="button" aria-label="Card 1" data-card="1" data-title="The Golden Knight">
             <div class="face front">
               <div class="ornament"></div>
               <div class="topbar"><span>arcana</span><span class="sigil">Ⅰ</span></div>
-
-              <!-- ✅ front: ONLY prompt centered -->
-              <div class="prompt only">Click to reveal your fortune.</div>
-
+              <div class="front-center">Click to reveal your fortune.</div>
               <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
             </div>
-
             <div class="face back">
-              <!-- Keep numbers, keep "revealed" topbar -->
               <div class="topbar"><span>revealed</span><span class="sigil">Ⅰ</span></div>
-
-              <!-- ✅ back: "Your fortune" then title + divider + fortune -->
               <div>
                 <div class="fortune"><strong>Your fortune</strong></div>
                 <div class="cardname back-title"></div>
                 <div class="divider"></div>
                 <div class="fortune" style="padding-top:12px;"><span class="fortune-text"></span></div>
               </div>
-
               <div class="bottom"><span class="stamp">fixed</span><span>card 1</span></div>
             </div>
           </div>
@@ -397,7 +378,7 @@
             <div class="face front">
               <div class="ornament"></div>
               <div class="topbar"><span>arcana</span><span class="sigil">Ⅱ</span></div>
-              <div class="prompt only">Click to reveal your fortune.</div>
+              <div class="front-center">Click to reveal your fortune.</div>
               <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
             </div>
             <div class="face back">
@@ -418,7 +399,7 @@
             <div class="face front">
               <div class="ornament"></div>
               <div class="topbar"><span>arcana</span><span class="sigil">Ⅲ</span></div>
-              <div class="prompt only">Click to reveal your fortune.</div>
+              <div class="front-center">Click to reveal your fortune.</div>
               <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
             </div>
             <div class="face back">
@@ -439,7 +420,7 @@
             <div class="face front">
               <div class="ornament"></div>
               <div class="topbar"><span>arcana</span><span class="sigil">Ⅳ</span></div>
-              <div class="prompt only">Click to reveal your fortune.</div>
+              <div class="front-center">Click to reveal your fortune.</div>
               <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
             </div>
             <div class="face back">
@@ -455,13 +436,13 @@
           </div>
         </div>
 
-        <!-- Row 2 (2 centered) -->
+        <!-- Row 2 -->
         <div class="slot m5">
           <div class="card" tabindex="0" role="button" aria-label="Card 5" data-card="5" data-title="The “Glad I Came”">
             <div class="face front">
               <div class="ornament"></div>
               <div class="topbar"><span>arcana</span><span class="sigil">Ⅴ</span></div>
-              <div class="prompt only">Click to reveal your fortune.</div>
+              <div class="front-center">Click to reveal your fortune.</div>
               <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
             </div>
             <div class="face back">
@@ -482,7 +463,7 @@
             <div class="face front">
               <div class="ornament"></div>
               <div class="topbar"><span>arcana</span><span class="sigil">Ⅵ</span></div>
-              <div class="prompt only">Click to reveal your fortune.</div>
+              <div class="front-center">Click to reveal your fortune.</div>
               <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
             </div>
             <div class="face back">
@@ -498,13 +479,13 @@
           </div>
         </div>
 
-        <!-- Row 3 (4) -->
+        <!-- Row 3 -->
         <div class="slot b7">
           <div class="card" tabindex="0" role="button" aria-label="Card 7" data-card="7" data-title="The Study Social">
             <div class="face front">
               <div class="ornament"></div>
               <div class="topbar"><span>arcana</span><span class="sigil">Ⅶ</span></div>
-              <div class="prompt only">Click to reveal your fortune.</div>
+              <div class="front-center">Click to reveal your fortune.</div>
               <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
             </div>
             <div class="face back">
@@ -525,7 +506,7 @@
             <div class="face front">
               <div class="ornament"></div>
               <div class="topbar"><span>arcana</span><span class="sigil">Ⅷ</span></div>
-              <div class="prompt only">Click to reveal your fortune.</div>
+              <div class="front-center">Click to reveal your fortune.</div>
               <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
             </div>
             <div class="face back">
@@ -546,7 +527,7 @@
             <div class="face front">
               <div class="ornament"></div>
               <div class="topbar"><span>arcana</span><span class="sigil">Ⅸ</span></div>
-              <div class="prompt only">Click to reveal your fortune.</div>
+              <div class="front-center">Click to reveal your fortune.</div>
               <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
             </div>
             <div class="face back">
@@ -567,7 +548,7 @@
             <div class="face front">
               <div class="ornament"></div>
               <div class="topbar"><span>arcana</span><span class="sigil">Ⅹ</span></div>
-              <div class="prompt only">Click to reveal your fortune.</div>
+              <div class="front-center">Click to reveal your fortune.</div>
               <div class="bottom"><span class="stamp">4ek</span><span>ucf</span></div>
             </div>
             <div class="face back">
@@ -588,7 +569,6 @@
   </div>
 
   <script>
-    // Fixed fortunes per card (1..10)
     const fortunes = {
       1: "You will meet a new friend in the Philanthropy Cab (golf cart).",
       2: "You will find Knightro (Day of Giving).",
@@ -606,11 +586,9 @@
     const resetBtn = document.getElementById("resetBtn");
     const cards = Array.from(document.querySelectorAll(".card"));
 
-    let chosenCard = null; // lock deck after first pick
+    let chosenCard = null;
 
-    function setStatus(msg){
-      statusText.textContent = msg || "";
-    }
+    function setStatus(msg){ statusText.textContent = msg || ""; }
 
     function lockOthers(exceptCard){
       cards.forEach(c => {
@@ -637,19 +615,17 @@
 
     function reveal(card){
       if (card.classList.contains("is-locked")) return;
-      if (chosenCard && chosenCard !== card) return; // hard lock
+      if (chosenCard && chosenCard !== card) return;
 
       const n = Number(card.dataset.card);
       const text = fortunes[n] || "Your fortune awaits.";
 
-      // set fortune
-      const targets = card.querySelectorAll(".fortune-text");
-      targets.forEach(t => t.textContent = text);
+      // fortune text
+      card.querySelectorAll(".fortune-text").forEach(t => t.textContent = text);
 
-      // set back title from data-title
+      // back title
       const title = card.dataset.title || "";
-      const titleTargets = card.querySelectorAll(".back-title");
-      titleTargets.forEach(t => t.textContent = title);
+      card.querySelectorAll(".back-title").forEach(t => t.textContent = title);
 
       card.classList.add("is-flipped");
       chosenCard = card;
@@ -657,7 +633,6 @@
       setStatus("Fortune revealed. Reset the deck to draw again.");
     }
 
-    // Click + keyboard support
     cards.forEach(card => {
       card.addEventListener("click", () => reveal(card));
       card.addEventListener("keydown", (e) => {
@@ -669,8 +644,6 @@
     });
 
     resetBtn.addEventListener("click", resetDeck);
-
-    // initial helper message
     setStatus("Click one card to receive a fortune.");
   </script>
 </body>
